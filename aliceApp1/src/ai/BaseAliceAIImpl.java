@@ -6,12 +6,37 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Our first iteration of the AliceAI api.
+ * It's better than just dumbly giving up or picking a random move that can be invalid.
+ * It actually calculates all the legal moves that can be made for the current game board.
+ * From this List of valid/legal moves, this implementation only returns the 1st
+ * move in the list.
+ * It does NOT select the smarter option of the bunch. There is no formal intelligence associated to it.
+ * 
+ * @author krish
+ *
+ */
 public class BaseAliceAIImpl implements AliceAI {
+	/**
+	 * The actual Board to hold the current state of the game.
+	 */
 	private Board board = new Board();
 
+	/**
+	 * This is not doing any thing as of now. Just returns the same input List of moves. 
+	 */
+	public List<String> filterMoves(List<String> validMoves) {
+		return validMoves;
+	}
+	
+	/**
+	 * Returns the next set of white moves that are legal to make but not smarter.
+	 */
     public List<String> nextWhiteMoves(){
         List<String> moves = new ArrayList<String>();
 
+        /* Loop through all positions on the first board and find out if a move can be made by the piece */
         for(int i = 0; i < 64; i++){
             switch (board.getFromBoard(Board.BOARD_A, i / 8, i % 8)){
                 case 'P' : nextMoves_P(1, i, moves);
@@ -29,6 +54,7 @@ public class BaseAliceAIImpl implements AliceAI {
             }
         }
 
+        /* Loop through the second board and find out all possible moves that can be made. */
         for(int i = 0; i < 64; i++){
             switch (board.getBoardB()[i / 8][i % 8]){
                 case 'P' : nextMoves_P(2, i, moves);
@@ -45,12 +71,18 @@ public class BaseAliceAIImpl implements AliceAI {
                     break;
             }
         }
+        
+        /* Finally return the List of moves. If this is empty, the calling program should give up. */
         return moves;
     }
 
+    /**
+     * Returns the next set of black moves that are legal to make but not smarter.
+     */
     public List<String> nextBlackMoves(){
         List<String> moves = new ArrayList<String>();
 
+        /* Loop through all positions on the first board and find out if a move can be made by the piece */
         for(int i = 0; i < 64; i++){
             switch (board.getFromBoard(Board.BOARD_A, i / 8, i % 8)){
                 case 'p' : nextMoves_p(1, i, moves);
@@ -68,6 +100,7 @@ public class BaseAliceAIImpl implements AliceAI {
             }
         }
 
+        /* Loop through the second board and find out all possible moves that can be made. */
         for(int i = 0; i < 64; i++){
             switch (board.getBoardB()[i / 8][i % 8]){
                 case 'p' : nextMoves_p(2, i, moves);
@@ -707,14 +740,20 @@ public class BaseAliceAIImpl implements AliceAI {
         }
     }
 
+    /**
+     * This is the Update function that simply updates the game state
+     * 
+     */
     public void update(String s) {
-    	
+    	// From the input message, find out which board it is, the piece, the row and column
+    	//  it has moved from and to.
         char boardTag = s.charAt(19);
         int preCol = s.charAt(21) - 'a';
         int preRow = 8 - (s.charAt(22) - '0');
         int col = s.charAt(27) - 'a';
         int row = 8 - (s.charAt(28) - '0');
 
+        // Just update the board.
         if(boardTag == '1'){
             board.getBoardB()[row][col] = board.getFromBoard(Board.BOARD_A, preRow, preCol);
             board.getBoardA()[preRow][preCol] = ' ';

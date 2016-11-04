@@ -6,6 +6,10 @@ import java.util.List;
 import java.util.stream.Collector;
 
 /**
+ * ******************* NIU *******************
+ * This class won't be used anymore..
+ * The AI is moved to BaseAliceImpl and the data structure to model.Board
+ * 
  * Created by Chang on 10/14/2016.
  */
 public class Board implements AliceAI {
@@ -734,8 +738,6 @@ public class Board implements AliceAI {
     }
 
     public void update(String s){
-//        String player = s.substring(0, 5);
-//        char piece = s.charAt(12);
         char boardTag = s.charAt(19);
         int preCol = s.charAt(21) - 'a';
         int preRow = 8 - (s.charAt(22) - '0');
@@ -751,19 +753,10 @@ public class Board implements AliceAI {
             boardB[preRow][preCol] = ' ';
         }
 
-        //print the board for debug
-//        for(char[] cs : boardA){
-//            for(char c : cs){
-//                System.out.print(c + " ");
-//            }
-//            System.out.println();
-//        }
-//        for(char[] cs : boardB){
-//            for(char c : cs){
-//                System.out.print(c + " ");
-//            }
-//            System.out.println();
-//        }
-
     }
+
+	public List<String> filterMoves(List<String> validMoves) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

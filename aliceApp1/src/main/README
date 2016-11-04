@@ -1,0 +1,2 @@
+The main package contains all the main classes.
+It should also contain all the Test classes (unless you want them in a separate test package)

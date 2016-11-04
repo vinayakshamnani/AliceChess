@@ -1,0 +1,10 @@
+The ai module holds the AI logic required by the Alice Chess game.
+
+The main AI module is the AliceAI.
+It's provided through the AliceAI interface.
+
+The base implementation is given by the BaseAliceAIImpl class.
+This isn't hte final class. It's only a prototype that manages to send out all valid moves.
+
+The AliceAIFactory class is the actual factory class that plugs in the implementation of the AliceAI api.
+

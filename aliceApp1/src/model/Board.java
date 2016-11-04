@@ -1,13 +1,38 @@
 package model;
 
+/**
+ * The model class that holds the game state
+ * This is as simple as holding a 2D array of the chess boards.
+ * 
+ * White pieces are represented as capital letters while black ones as small letters.
+ * 
+ * @author krish
+ *
+ */
 public class Board {
+	/**
+	 * A simple notation of Board A
+	 */
 	public static final int BOARD_A = 1;
+	
+	/**
+	 * A simple notation of Board B
+	 */
 	public static final int BOARD_B = 2;
 	
-	
+	/**
+	 * A notation of the rows.
+	 */
 	private char[] row = {'8', '7', '6', '5', '4', '3', '2', '1'};
+	
+	/**
+	 * A notation of the columns.
+	 */
     private char[] col = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
 
+    /**
+     * Board A representation
+     */
     private char[][] boardA = {
             {'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'},
             {'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'},
@@ -19,6 +44,9 @@ public class Board {
             {'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'},
     };
 
+    /**
+     * Board B representation
+     */
     private char[][] boardB = {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
