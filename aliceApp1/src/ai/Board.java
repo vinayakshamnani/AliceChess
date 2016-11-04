@@ -1,4 +1,4 @@
-package AI;
+package ai;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,7 +8,7 @@ import java.util.stream.Collector;
 /**
  * Created by Chang on 10/14/2016.
  */
-public class Board {
+public class Board implements AliceAI {
 
     private static char[] row = {'8', '7', '6', '5', '4', '3', '2', '1'};
     private static char[] col = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
@@ -35,8 +35,8 @@ public class Board {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
     };
 
-    public static List<String> nextWhiteMoves(){
-        List<String> moves = new ArrayList<>();
+    public List<String> nextWhiteMoves(){
+        List<String> moves = new ArrayList<String>();
 
         for(int i = 0; i < 64; i++){
             switch (boardA[i / 8][i % 8]){
@@ -74,8 +74,8 @@ public class Board {
         return moves;
     }
 
-    public static List<String> nextBlackMoves(){
-        List<String> moves = new ArrayList<>();
+    public List<String> nextBlackMoves(){
+        List<String> moves = new ArrayList<String>();
 
         for(int i = 0; i < 64; i++){
             switch (boardA[i / 8][i % 8]){
@@ -113,7 +113,7 @@ public class Board {
         return moves;
     }
 
-    private static void nextMoves_P(int boardTag, int pos, List<String> moves){
+    private void nextMoves_P(int boardTag, int pos, List<String> moves){
         int r = pos / 8;
         int c = pos % 8;
 
@@ -157,7 +157,7 @@ public class Board {
 
     }
 
-    private static void nextMoves_p(int boardTag, int pos, List<String> moves){
+    private void nextMoves_p(int boardTag, int pos, List<String> moves){
         int r = pos / 8;
         int c = pos % 8;
 
@@ -201,7 +201,7 @@ public class Board {
 
     }
 
-    private static void nextMoves_R(int boardTag, int pos, List<String> moves){
+    private void nextMoves_R(int boardTag, int pos, List<String> moves){
         int r = pos / 8;
         int c = pos % 8;
 
@@ -457,11 +457,11 @@ public class Board {
 
     }
 
-    private static void nextMoves_N(int boardTag, int pos, List<String> moves){
+    private void nextMoves_N(int boardTag, int pos, List<String> moves){
         int r = pos / 8;
         int c = pos % 8;
 
-        List<List<Integer>> candidates = new ArrayList<>();
+        List<List<Integer>> candidates = new ArrayList<List<Integer>>();
         candidates.add(Arrays.asList(r + 1, c + 2));
         candidates.add(Arrays.asList(r + 2, c + 1));
         candidates.add(Arrays.asList(r + 2, c - 1));
@@ -509,7 +509,7 @@ public class Board {
         }
     }
 
-    private static void nextMoves_B(int boardTag, int pos, List<String> moves){
+    private void nextMoves_B(int boardTag, int pos, List<String> moves){
         int r = pos / 8;
         int c = pos % 8;
 
@@ -660,8 +660,8 @@ public class Board {
         }
     }
 
-    private static void nextMoves_Q(int boardTag, int pos, List<String> moves){
-        List<String> Q_moves = new ArrayList<>();
+    private void nextMoves_Q(int boardTag, int pos, List<String> moves){
+        List<String> Q_moves = new ArrayList<String>();
         nextMoves_R(boardTag, pos, Q_moves);
         nextMoves_B(boardTag, pos, Q_moves);
         for(int i = 0; i < Q_moves.size(); i++){
@@ -674,7 +674,7 @@ public class Board {
 
     }
 
-    private static void nextMoves_K(int boardTag, int pos, List<String> moves){
+    private void nextMoves_K(int boardTag, int pos, List<String> moves){
         int r = pos / 8;
         int c = pos % 8;
 
@@ -733,7 +733,7 @@ public class Board {
         }
     }
 
-    public static void update(String s){
+    public void update(String s){
 //        String player = s.substring(0, 5);
 //        char piece = s.charAt(12);
         char boardTag = s.charAt(19);
