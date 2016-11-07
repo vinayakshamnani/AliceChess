@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 import ai.AliceAI;
 import ai.AliceAIFactory;
+import model.Board;
 
 public class Main {
 
@@ -32,15 +33,22 @@ public class Main {
             	moveCount++;
                 //TODO:first check if the move is legal, if it is, update the board
             	ai.update(read);
+
+                // TODO : remove the counter once we have a better AI
+                if(moveCount >= 102) {
+                    System.out.println(player + " surrenders");
+                    break;
+                }
+
                 if(player.equals("white")){
                     List<String> whiteMoves = ai.nextWhiteMoves();
                     if(whiteMoves.size() == 0){
                     	System.out.println(player + " surrenders");
                         break;
                     }
-                    String theMove = whiteMoves.get(0); 
+                    String theMove = whiteMoves.get(0);
                     ai.update(theMove);
-//                    for(String s : whiteMoves) System.out.println(s);
+                    // for(String s : whiteMoves) System.out.println(s);
                     System.out.println(theMove);
                 }
                 else{
@@ -54,15 +62,10 @@ public class Main {
                     System.out.println(theMove);
                 }
                 
-                if(moveCount >= 102) {
-                	System.out.println(player + " surrenders");
-                	isStarted = false;
-                    break;	
-                }
+
             }
             else isStarted = false;
         }
         sc.close();
 	}
-
 }

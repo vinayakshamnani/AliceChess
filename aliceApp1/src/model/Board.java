@@ -61,6 +61,15 @@ public class Board {
     public char getFromBoard(int board, int row, int col) {
     	return board == BOARD_A ? boardA[row][col] : boardB[row][col];
     }
+
+	public void setBoard(int board, int row, int col, char ch) {
+		if(board == BOARD_A) {
+			boardA[row][col] = ch;
+		}
+		else{
+			boardB[row][col] = ch;
+		}
+	}
     
     public char row(int rowVal) {
     	return row[rowVal];

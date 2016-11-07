@@ -38,8 +38,8 @@ public class BaseAliceAIImpl implements AliceAI {
 
         /* Loop through all positions on the first board and find out if a move can be made by the piece */
         for(int i = 0; i < 64; i++){
-            switch (board.getFromBoard(Board.BOARD_A, i / 8, i % 8)){
-                case 'P' : nextMoves_P(1, i, moves);
+            switch (board.getBoardA()[i / 8][i % 8]){
+                case 'P' : nextMoves_P(1, i, moves, -1);
                     break;
                 case 'R' : nextMoves_R(1, i, moves);
                     break;
@@ -57,7 +57,7 @@ public class BaseAliceAIImpl implements AliceAI {
         /* Loop through the second board and find out all possible moves that can be made. */
         for(int i = 0; i < 64; i++){
             switch (board.getBoardB()[i / 8][i % 8]){
-                case 'P' : nextMoves_P(2, i, moves);
+                case 'P' : nextMoves_P(2, i, moves, -1);
                     break;
                 case 'R' : nextMoves_R(2, i, moves);
                     break;
@@ -84,8 +84,8 @@ public class BaseAliceAIImpl implements AliceAI {
 
         /* Loop through all positions on the first board and find out if a move can be made by the piece */
         for(int i = 0; i < 64; i++){
-            switch (board.getFromBoard(Board.BOARD_A, i / 8, i % 8)){
-                case 'p' : nextMoves_p(1, i, moves);
+            switch (board.getBoardA()[i / 8][i % 8]){
+                case 'p' : nextMoves_P(1, i, moves, 1);
                     break;
                 case 'r' : nextMoves_R(1, i, moves);
                     break;
@@ -103,7 +103,7 @@ public class BaseAliceAIImpl implements AliceAI {
         /* Loop through the second board and find out all possible moves that can be made. */
         for(int i = 0; i < 64; i++){
             switch (board.getBoardB()[i / 8][i % 8]){
-                case 'p' : nextMoves_p(2, i, moves);
+                case 'p' : nextMoves_P(2, i, moves, 1);
                     break;
                 case 'r' : nextMoves_R(2, i, moves);
                     break;
@@ -120,348 +120,66 @@ public class BaseAliceAIImpl implements AliceAI {
         return moves;
     }
 
-    private void nextMoves_P(int boardTag, int pos, List<String> moves){
+    private void nextMoves_P(int boardTag, int pos, List<String> moves, int direction){
         int r = pos / 8;
         int c = pos % 8;
+        int dir = direction;
+        String player = (dir == -1) ? "white" : "black";
+        char ini_pos = (dir == -1) ? '2' : '7';
+        char ch = (dir == -1) ? 'P' : 'p';
 
-        if(boardTag == 1){
-            //P is at the initial position
-            if(board.getRow()[r] == '2'){
-                //move forward by 1 step
-                if(board.getFromBoard(Board.BOARD_A, r - 1, c) == ' ' && board.getBoardB()[r - 1][c] == ' '){
-                    moves.add("white moves P from 1 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[c] + board.getRow()[r - 1]);
+        //pawn can move 2 steps if it is at the initial position
+        if(boardTag == 1 && board.getRow()[r] == ini_pos){
+            //move by 2 steps
+            if(board.getFromBoard(boardTag, r + 2 * dir, c) == ' ' && board.getBoardB()[r + 2 * dir][c] == ' '){
+                // temporarily update the board to check if the king is still safe after the move
+                board.setBoard(boardTag, r, c, ' ');
+                board.setBoard((boardTag * 2) % 3, r + 2 * dir, c, ch);
+                if(isKingSafe(player)) {
+                    moves.add(player + " moves " + ch + " from " + boardTag + " " + board.getCol()[c] + board.getRow()[r]
+                            + " to " + board.getCol()[c] + board.getRow()[r + 2 * dir]);
                 }
-                //move by 2 steps
-                if(board.getFromBoard(Board.BOARD_A, r - 2, c) == ' ' && board.getBoardB()[r - 2][c] == ' '){
-                    moves.add("white moves P from 1 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[c] + board.getRow()[r - 2]);
-                }
-            }
-
-            else{
-                //TODO: en passant
-                //TODO: promotion
-                //TODO: catch enemy piece
-
-                //move forward by 1 step
-                if(board.getFromBoard(Board.BOARD_A, r - 1, c) == ' ' && board.getBoardB()[r - 1][c] == ' '){
-                    moves.add("white moves P from 1 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[c] + board.getRow()[r - 1]);
-                }
-
+                //undo update
+                board.setBoard(boardTag, r, c, ch);
+                board.setBoard((boardTag * 2) % 3, r - 2, c, ' ');
             }
         }
-
         else{
-            //TODO: en passant
-            //TODO: promotion
-            //TODO: catch enemy piece
-
             //move forward by 1 step
-            if(board.getBoardB()[r - 1][c] == ' ' && board.getFromBoard(Board.BOARD_A, r - 1, c) == ' '){
-                moves.add("white moves P from 2 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[c] + board.getRow()[r - 1]);
+            if(board.getFromBoard(boardTag, r + dir, c) == ' ' &&
+                    board.getFromBoard((boardTag * 2) % 3, r + dir, c) == ' '){
+                // temporarily update the board to check if the king is still safe after the move
+                board.setBoard(boardTag, r, c, ' ');
+                board.setBoard((boardTag * 2) % 3, r + dir, c, ch);
+                if(isKingSafe(player)) {
+                    moves.add(player + " moves " + ch + " from " + boardTag + " " + board.getCol()[c] + board.getRow()[r]
+                            + " to " + board.getCol()[c] + board.getRow()[r + dir]);
+                }
+                //undo update
+                board.setBoard(boardTag, r, c, ch);
+                board.setBoard((boardTag * 2) % 3, r + dir, c, ' ');
             }
+            //catch enemy piece
+            try{
+                for(int i = -1; i <= 1; i+=2) {
+                    if (Character.isLowerCase(board.getFromBoard(boardTag, r + dir, c + i))
+                            && board.getFromBoard((boardTag * 2) % 3, r + dir, c + i) == ' '){
+                        char enemy = board.getFromBoard(boardTag, r + dir, c + i);
+                        // temporarily update the board to check if the king is still safe after the move
+                        board.setBoard(boardTag, r, c, ' ');
+                        board.setBoard((boardTag * 2) % 3, r + dir, c + i, ch);
+                        if (isKingSafe(player)) {
+                            moves.add(player + " moves " + ch + " from " + boardTag + " " + board.getCol()[c] + board.getRow()[r] +
+                                    " to " + board.getCol()[c + i] + board.getRow()[r + dir]);
+                        }
+                        //undo update
+                        board.setBoard(boardTag, r, c, 'P');
+                        board.setBoard(boardTag, r + dir, c + i, enemy);
+                        board.setBoard((boardTag * 2) % 3, r + dir, c + i, ' ');
+                    }
+                }
+            }catch (Exception e){}
         }
-
-
-    }
-
-    private void nextMoves_p(int boardTag, int pos, List<String> moves){
-        int r = pos / 8;
-        int c = pos % 8;
-
-        if(boardTag == 1){
-            //p is at the initial position
-            if(board.getRow()[r] == '7'){
-                //move forward by 1 step
-                if(board.getFromBoard(Board.BOARD_A, r + 1, c) == ' ' && board.getBoardB()[r + 1][c] == ' '){
-                    moves.add("black moves P from 1 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[c] + board.getRow()[r + 1]);
-                }
-                //move by 2 steps
-                if(board.getFromBoard(Board.BOARD_A, r + 2, c) == ' ' && board.getBoardB()[r + 2][c] == ' '){
-                    moves.add("black moves P from 1 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[c] + board.getRow()[r + 2]);
-                }
-                //TODO: catch enemy piece
-            }
-
-            else{
-                //TODO: en passant
-                //TODO: promotion
-                //TODO: catch enemy piece
-
-                //move forward by 1 step
-                if(board.getFromBoard(Board.BOARD_A, r + 1, c) == ' ' && board.getBoardB()[r + 1][c] == ' '){
-                    moves.add("black moves P from 1 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[c] + board.getRow()[r + 1]);
-                }
-
-            }
-        }
-
-        else{
-            //TODO: promotion
-            //TODO: catch enemy piece
-
-            //move forward by 1 step
-            if(board.getBoardB()[r + 1][c] == ' ' && board.getFromBoard(Board.BOARD_A, r + 1, c) == ' '){
-                moves.add("black moves P from 2 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[c] + board.getRow()[r + 1]);
-            }
-        }
-
-
-    }
-
-    private void nextMoves_R(int boardTag, int pos, List<String> moves){
-        int r = pos / 8;
-        int c = pos % 8;
-
-        if(boardTag == 1){
-            //TODO: castling
-
-            String player = Character.isUpperCase(board.getFromBoard(Board.BOARD_A, r, c)) ? "white" : "black";
-            //move left
-            for(int i = c - 1; i >= 0; i--){
-                if(board.getFromBoard(Board.BOARD_A, r, i) == ' '){
-                    if(board.getBoardB()[r][i] == ' '){
-                        moves.add(player + " moves R from 1 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[i] + board.getRow()[r]);
-                    }
-                }
-                else if(Character.isUpperCase(board.getFromBoard(Board.BOARD_A, r, i))){
-                    //can not pass the same board.getCol()or piece
-                    if(player.equals("white")) break;
-                    //can catch the enemy piece
-                    else{
-                        if(board.getBoardB()[r][i] == ' ') {
-                            moves.add(player + " moves R from 1 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[i] + board.getRow()[r]);
-                        }
-                        break;
-                    }
-                }
-                else{
-                    //can not pass the same board.getCol()or piece
-                    if(player.equals("black")) break;
-                    //can catch the enemy piece
-                    else{
-                        if(board.getBoardB()[r][i] == ' ') {
-                            moves.add(player + " moves R from 1 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[i] + board.getRow()[r]);
-                        }
-                        break;
-                    }
-                }
-            }
-            //move right
-            for(int i = c + 1; i < 8; i++){
-                if(board.getFromBoard(Board.BOARD_A, r, i) == ' '){
-                    if(board.getBoardB()[r][i] == ' '){
-                        moves.add(player + " moves R from 1 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[i] + board.getRow()[r]);
-                    }
-                }
-                else if(Character.isUpperCase(board.getFromBoard(Board.BOARD_A, r, i))){
-                    //can not pass the same board.getCol()or piece
-                    if(player.equals("white")) break;
-                    //can catch the enemy piece
-                    else{
-                        if(board.getBoardB()[r][i] == ' ') {
-                            moves.add(player + " moves R from 1 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[i] + board.getRow()[r]);
-                        }
-                        break;
-                    }
-                }
-                else{
-                    //can not pass the same board.getCol()or piece
-                    if(player.equals("black")) break;
-                    //can catch the enemy piece
-                    else{
-                        if(board.getBoardB()[r][i] == ' ') {
-                            moves.add(player + " moves R from 1 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[i] + board.getRow()[r]);
-                        }
-                        break;
-                    }
-                }
-            }
-            //move up
-            for(int i = r - 1; i >= 0; i--){
-                if(board.getFromBoard(Board.BOARD_A, i, c) == ' '){
-                    if(board.getBoardB()[i][c] == ' '){
-                        moves.add(player + " moves R from 1 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[c] + board.getRow()[i]);
-                    }
-                }
-                else if(Character.isUpperCase(board.getFromBoard(Board.BOARD_A, i, c))){
-                    //can not pass the same board.getCol()or piece
-                    if(player.equals("white")) break;
-                    //can catch the enemy piece
-                    else{
-                        if(board.getBoardB()[i][c] == ' ') {
-                            moves.add(player + " moves R from 1 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[c] + board.getRow()[i]);
-                        }
-                        break;
-                    }
-                }
-                else{
-                    //can not pass the same board.getCol()or piece
-                    if(player.equals("black")) break;
-                    //can catch the enemy piece
-                    else{
-                        if(board.getBoardB()[i][c] == ' ') {
-                            moves.add(player + " moves R from 1 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[c] + board.getRow()[i]);
-                        }
-                        break;
-                    }
-                }
-            }
-            //move down
-            for(int i = r + 1; i < 8; i++){
-                if(board.getFromBoard(Board.BOARD_A, i, c) == ' '){
-                    if(board.getBoardB()[i][c] == ' '){
-                        moves.add(player + " moves R from 1 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[c] + board.getRow()[i]);
-                    }
-                }
-                else if(Character.isUpperCase(board.getFromBoard(Board.BOARD_A, i, c))){
-                    //can not pass the same board.getCol()or piece
-                    if(player.equals("white")) break;
-                    //can catch the enemy piece
-                    else{
-                        if(board.getBoardB()[i][c] == ' ') {
-                            moves.add(player + " moves R from 1 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[c] + board.getRow()[i]);
-                        }
-                        break;
-                    }
-                }
-                else{
-                    //can not pass the same board.getCol()or piece
-                    if(player.equals("black")) break;
-                    //can catch the enemy piece
-                    else{
-                        if(board.getBoardB()[i][c] == ' ') {
-                            moves.add(player + " moves R from 1 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[c] + board.getRow()[i]);
-                        }
-                        break;
-                    }
-                }
-            }
-        }
-
-        else{
-            String player = Character.isUpperCase(board.getBoardB()[r][c]) ? "white" : "black";
-            //move left
-            for(int i = c - 1; i >= 0; i--){
-                if(board.getBoardB()[r][i] == ' '){
-                    if(board.getFromBoard(Board.BOARD_A, r, i) == ' '){
-                        moves.add(player + " moves R from 2 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[i] + board.getRow()[i]);
-                    }
-                }
-                else if(Character.isUpperCase(board.getBoardB()[r][i])){
-                    //can not pass the same board.getCol()or piece
-                    if(player.equals("white")) break;
-                    //can catch the enemy piece
-                    else{
-                        if(board.getFromBoard(Board.BOARD_A, r, i) == ' ') {
-                            moves.add(player + " moves R from 2 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[i] + board.getRow()[i]);
-                        }
-                        break;
-                    }
-                }
-                else{
-                    //can not pass the same board.getCol()or piece
-                    if(player.equals("black")) break;
-                    //can catch the enemy piece
-                    else{
-                        if(board.getFromBoard(Board.BOARD_A, r, i) == ' ') {
-                            moves.add(player + " moves R from 2 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[i] + board.getRow()[i]);
-                        }
-                        break;
-                    }
-                }
-            }
-            //move right
-            for(int i = c + 1; i < 8; i++){
-                if(board.getBoardB()[r][i] == ' '){
-                    if(board.getFromBoard(Board.BOARD_A, r, i) == ' '){
-                        moves.add(player + " moves R from 2 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[i] + board.getRow()[i]);
-                    }
-                }
-                else if(Character.isUpperCase(board.getBoardB()[r][i])){
-                    //can not pass the same board.getCol()or piece
-                    if(player.equals("white")) break;
-                    //can catch the enemy piece
-                    else{
-                        if(board.getFromBoard(Board.BOARD_A, r, i) == ' ') {
-                            moves.add(player + " moves R from 2 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[i] + board.getRow()[i]);
-                        }
-                        break;
-                    }
-                }
-                else{
-                    //can not pass the same board.getCol()or piece
-                    if(player.equals("black")) break;
-                    //can catch the enemy piece
-                    else{
-                        if(board.getFromBoard(Board.BOARD_A, r, i) == ' ') {
-                            moves.add(player + " moves R from 2 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[i] + board.getRow()[i]);
-                        }
-                        break;
-                    }
-                }
-            }
-            //move up
-            for(int i = r - 1; i >= 0; i--){
-                if(board.getBoardB()[i][c] == ' '){
-                    if(board.getFromBoard(Board.BOARD_A, i, c) == ' '){
-                        moves.add(player + " moves R from 2 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[c] + board.getRow()[i]);
-                    }
-                }
-                else if(Character.isUpperCase(board.getBoardB()[r][i])){
-                    //can not pass the same board.getCol()or piece
-                    if(player.equals("white")) break;
-                    //can catch the enemy piece
-                    else{
-                        if(board.getFromBoard(Board.BOARD_A, i, c) == ' ') {
-                            moves.add(player + " moves R from 2 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[c] + board.getRow()[i]);
-                        }
-                        break;
-                    }
-                }
-                else{
-                    //can not pass the same board.getCol()or piece
-                    if(player.equals("black")) break;
-                    //can catch the enemy piece
-                    else{
-                        if(board.getFromBoard(Board.BOARD_A, i, c) == ' ') {
-                            moves.add(player + " moves R from 2 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[c] + board.getRow()[i]);
-                        }
-                        break;
-                    }
-                }
-            }
-            //move down
-            for(int i = r + 1; i < 8; i++){
-                if(board.getBoardB()[i][c] == ' '){
-                    if(board.getFromBoard(Board.BOARD_A, i, c) == ' '){
-                        moves.add(player + " moves R from 2 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[c] + board.getRow()[i]);
-                    }
-                }
-                else if(Character.isUpperCase(board.getBoardB()[r][i])){
-                    //can not pass the same board.getCol()or piece
-                    if(player.equals("white")) break;
-                        //can catch the enemy piece
-                    else{
-                        if(board.getFromBoard(Board.BOARD_A, i, c) == ' ') {
-                            moves.add(player + " moves R from 2 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[c] + board.getRow()[i]);
-                        }
-                        break;
-                    }
-                }
-                else{
-                    //can not pass the same board.getCol()or piece
-                    if(player.equals("black")) break;
-                    //can catch the enemy piece
-                    else{
-                        if(board.getFromBoard(Board.BOARD_A, i, c) == ' ') {
-                            moves.add(player + " moves R from 2 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[c] + board.getRow()[i]);
-                        }
-                        break;
-                    }
-                }
-            }
-        }
-
     }
 
     private void nextMoves_N(int boardTag, int pos, List<String> moves){
@@ -478,266 +196,473 @@ public class BaseAliceAIImpl implements AliceAI {
         candidates.add(Arrays.asList(r - 2, c + 1));
         candidates.add(Arrays.asList(r - 1, c + 2));
 
-        if(boardTag == 1){
-            String player = Character.isUpperCase(board.getFromBoard(Board.BOARD_A, r, c)) ? "white" : "black";
+        String player = Character.isUpperCase(board.getFromBoard(boardTag, r, c)) ? "white" : "black";
 
-            for(List<Integer> list : candidates){
-                // check if the target place is within the board
-                if(list.get(0) >= 0 && list.get(0) < 8 && list.get(1) >= 0 && list.get(1) < 8){
-                    // check if the target place is empty or occupied by enemy piece
-                    if(board.getFromBoard(Board.BOARD_A, list.get(0), list.get(1)) == ' ' ||
-                            Character.isUpperCase(board.getFromBoard(Board.BOARD_A, list.get(0), list.get(1))) != Character.isUpperCase(board.getFromBoard(Board.BOARD_A, r, c))){
-                        // check if the corresponding place on the other board is empty
-                        if(board.getBoardB()[list.get(0)][list.get(1)] == ' '){
-                            moves.add(player + " moves N from 1 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[list.get(1)] + board.getRow()[list.get(0)]);
+        for(List<Integer> list : candidates){
+            // check if the target place is within the board
+            if(list.get(0) >= 0 && list.get(0) < 8 && list.get(1) >= 0 && list.get(1) < 8){
+                // check if the target place is empty or occupied by enemy piece
+                if(board.getFromBoard(boardTag, list.get(0), list.get(1)) == ' ' ||
+                        Character.isUpperCase(board.getFromBoard(boardTag, list.get(0), list.get(1))) !=
+                                Character.isUpperCase(board.getFromBoard(boardTag, r, c))){
+                    // check if the corresponding place on the other board is empty
+                    if(board.getFromBoard((boardTag * 2) % 3, list.get(0), list.get(1)) == ' '){
+                        char ch = player.equals("white") ? 'N' : 'n';
+                        char enemy = board.getFromBoard(boardTag, list.get(0), list.get(1));
+                        // temporarily update the board to check if the king is still safe
+                        board.setBoard(boardTag, r, c, ' ');
+                        board.setBoard(boardTag, list.get(0), list.get(1), ' ');
+                        board.setBoard((boardTag * 2) % 3, list.get(0), list.get(1), ch);
+                        if(isKingSafe(player)) {
+                            moves.add(player + " moves " + ch + " from " + boardTag + " " +
+                                    board.getCol()[c] + board.getRow()[r] + " to " +
+                                    board.getCol()[list.get(1)] + board.getRow()[list.get(0)]);
                         }
-                    }
-                }
-            }
-
-        }
-
-        else{
-            String player = Character.isUpperCase(board.getBoardB()[r][c]) ? "white" : "black";
-
-            for(List<Integer> list : candidates){
-                // check if the target place is within the board
-                if(list.get(0) >= 0 && list.get(0) < 8 && list.get(1) >= 0 && list.get(1) < 8){
-                    // check if the target place is empty or occupied by enemy piece
-                    if(board.getBoardB()[list.get(0)][list.get(1)] == ' ' ||
-                            Character.isUpperCase(board.getBoardB()[list.get(0)][list.get(1)]) != Character.isUpperCase(board.getBoardB()[r][c])){
-                        // check if the corresponding place on the other board is empty
-                        if(board.getFromBoard(Board.BOARD_A, list.get(0), list.get(1)) == ' '){
-                            moves.add(player + " moves N from 2 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[list.get(1)] + board.getRow()[list.get(0)]);
-                        }
+                        // undo the update
+                        board.setBoard(boardTag, r, c, ch);
+                        board.setBoard(boardTag, list.get(0), list.get(1), enemy);
+                        board.setBoard((boardTag * 2) % 3, list.get(0), list.get(1), ' ');
                     }
                 }
             }
         }
     }
+
+    private void nextMoves_R(int boardTag, int pos, List<String> moves){
+        int r = pos / 8;
+        int c = pos % 8;
+
+        String player = Character.isUpperCase(board.getFromBoard(boardTag, r, c)) ? "white" : "black";
+
+        // use i and j to indicate the direction of the move, for example (0, 1) refers to moving right
+        for(int i = -1; i <= 1; i++){
+            for(int j = -1; j <= 1; j++){
+                if((i == 0 && j != 0) || (i != 0 && j == 0)){
+                    // steps indicates how far the move is from the original position
+                    int steps = 1;
+                    try{
+                        // keep trying while the path is empty, else check if the piece on the path is an enemy piece
+                        while(board.getFromBoard(boardTag, r + i * steps, c + j * steps) == ' '){
+                            // if the target position on the opposite board is empty and king is safe after the move
+                            // then we can make the move
+                            if(board.getFromBoard((boardTag * 2) % 3, r + i * steps, c + j * steps) == ' '){
+                                char ch = player.equals("white") ? 'R' : 'r';
+                                // update the board to can check if king is still safe after the rook move
+                                board.setBoard(boardTag, r, c, ' ');
+                                board.setBoard((boardTag * 2) % 3, r + i * steps, c + j * steps, ch);
+                                if(isKingSafe(player)) {
+                                    moves.add(player + " moves " + ch + " from " + boardTag + " " +
+                                            board.getCol()[c] + board.getRow()[r] + " to " +
+                                            board.getCol()[c + j * steps] + board.getRow()[r + i * steps]);
+                                }
+                                // undo the move and restore the board
+                                board.setBoard(boardTag, r, c, ch);
+                                board.setBoard((boardTag * 2) % 3, r + i * steps, c + j * steps, ' ');
+                            }
+                            steps++;
+                        }
+                        // can catch enemy piece
+                        if(Character.isUpperCase(board.getFromBoard(boardTag, r + i * steps, c + j * steps)) ^
+                                player.equals("white")){
+                            if(board.getFromBoard((boardTag * 2) % 3, r + i * steps, c + j * steps) == ' '){
+                                char ch = player.equals("white") ? 'R' : 'r';
+                                char enemy = board.getFromBoard(boardTag, r + i * steps, c + j * steps);
+                                // temporarily update the board to can check if king is still safe after the rook move
+                                board.setBoard(boardTag, r, c, ' '); // previous rook pos
+                                board.setBoard(boardTag, r + i * steps, c + j * steps, ' '); // previous enemy pos
+                                board.setBoard((boardTag * 2) % 3, r + i * steps, c + j * steps, ch); // new rook pos
+                                if(isKingSafe(player)) {
+                                    moves.add(player + " moves " + ch + " from " + boardTag + " " +
+                                            board.getCol()[c] + board.getRow()[r] + " to " +
+                                            board.getCol()[c + j * steps] + board.getRow()[r + i * steps]);
+                                }
+                                // undo the update
+                                board.setBoard(boardTag, r, c, ch);
+                                board.setBoard(boardTag, r + i * steps, c + j * steps, enemy);
+                                board.setBoard((boardTag * 2) % 3, r + i * steps, c + j * steps, ' ');
+                            }
+                        }
+                    }
+                    catch (Exception e){}
+                }
+            }
+        }
+    }
+
 
     private void nextMoves_B(int boardTag, int pos, List<String> moves){
         int r = pos / 8;
         int c = pos % 8;
 
-        if(boardTag == 1){
-            String player = Character.isUpperCase(board.getFromBoard(Board.BOARD_A, r, c)) ? "white" : "black";
+        String player = Character.isUpperCase(board.getFromBoard(boardTag, r, c)) ? "white" : "black";
 
-            // move southeast
-            for(int i = r + 1, j = c + 1; i < 8 && j < 8; i++, j++){
-                if(board.getFromBoard(Board.BOARD_A, i, j) == ' '){
-                    if(board.getBoardB()[i][j] == ' ') {
-                        moves.add(player + " moves B from 1 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[j] + board.getRow()[i]);
+        // use i and j to indicate the direction of the move, for example (1, 1) refers to moving southeast
+        for(int i = -1; i <= 1; i+=2){
+            for(int j = -1; j <= 1; j+=2){
+                // steps indicates how far the move is from the original position
+                int steps = 1;
+                try{
+                    // keep trying while the path is empty, else check if the piece on the path is an enemy piece
+                    while(board.getFromBoard(boardTag, r + i * steps, c + j * steps) == ' '){
+                        // if the target position on the opposite board is empty and king is safe after the move
+                        // then we can make the move
+                        if(board.getFromBoard((boardTag * 2) % 3, r + i * steps, c + j * steps) == ' '){
+                            char ch = player.equals("white") ? 'B' : 'b';
+                            // update the board to check if king is still safe after the rook move
+                            board.setBoard(boardTag, r, c, ' ');
+                            board.setBoard((boardTag * 2) % 3, r + i * steps, c + j * steps, ch);
+                            if(isKingSafe(player)) {
+                                moves.add(player + " moves " + ch + " from " + boardTag + " " +
+                                        board.getCol()[c] + board.getRow()[r] + " to " +
+                                        board.getCol()[c + j * steps] + board.getRow()[r + i * steps]);
+                            }
+                            // undo the move and restore the board
+                            board.setBoard(boardTag, r, c, ch);
+                            board.setBoard((boardTag * 2) % 3, r + i * steps, c + j * steps, ' ');
+                        }
+                        steps++;
                     }
-                }
-                else{
-                    if(Character.isUpperCase(board.getFromBoard(Board.BOARD_A, i, j)) != Character.isUpperCase(board.getFromBoard(Board.BOARD_A, r, c))){
-                        if(board.getBoardB()[i][j] == ' ') {
-                            moves.add(player + " moves B from 1 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[j] + board.getRow()[i]);
+                    // can catch enemy piece
+                    if(Character.isUpperCase(board.getFromBoard(boardTag, r + i * steps, c + j * steps)) ^
+                            player.equals("white")){
+                        // check if the corresponding position on the other board is empty
+                        if(board.getFromBoard((boardTag * 2) % 3, r + i * steps, c + j * steps) == ' '){
+                            char ch = player.equals("white") ? 'B' : 'b';
+                            char enemy = board.getFromBoard(boardTag, r + i * steps, c + j * steps);
+                            // temporarily update the board to check if king is still safe after the rook move
+                            board.setBoard(boardTag, r, c, ' ');
+                            board.setBoard(boardTag, r + i * steps, c + j * steps, ' ');
+                            board.setBoard((boardTag * 2) % 3, r + i * steps, c + j * steps, ch);
+                            if(isKingSafe(player)) {
+                                moves.add(player + " moves " + ch + " from " + boardTag + " " +
+                                        board.getCol()[c] + board.getRow()[r] + " to " +
+                                        board.getCol()[c + j * steps] + board.getRow()[r + i * steps]);
+                            }
+                            // undo the update
+                            board.setBoard(boardTag, r, c, ch);
+                            board.setBoard(boardTag, r + i * steps, c + j * steps, enemy);
+                            board.setBoard((boardTag * 2) % 3, r + i * steps, c + j * steps, ' ');
                         }
                     }
-                    break;
                 }
+                catch (Exception e){}
             }
-
-            // move southwest
-            for(int i = r + 1, j = c - 1; i < 8 && j >= 0; i++, j--){
-                if(board.getFromBoard(Board.BOARD_A, i, j) == ' '){
-                    if(board.getBoardB()[i][j] == ' ') {
-                        moves.add(player + " moves B from 1 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[j] + board.getRow()[i]);
-                    }
-                }
-                else{
-                    if(Character.isUpperCase(board.getFromBoard(Board.BOARD_A, i, j)) != Character.isUpperCase(board.getFromBoard(Board.BOARD_A, r, c))){
-                        if(board.getBoardB()[i][j] == ' ') {
-                            moves.add(player + " moves B from 1 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[j] + board.getRow()[i]);
-                        }
-                    }
-                    break;
-                }
-            }
-
-            // move northwest
-            for(int i = r - 1, j = c - 1; i >= 0 && j >= 0; i--, j--){
-                if(board.getFromBoard(Board.BOARD_A, i, j) == ' '){
-                    if(board.getBoardB()[i][j] == ' ') {
-                        moves.add(player + " moves B from 1 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[j] + board.getRow()[i]);
-                    }
-                }
-                else{
-                    if(Character.isUpperCase(board.getFromBoard(Board.BOARD_A, i, j)) != Character.isUpperCase(board.getFromBoard(Board.BOARD_A, r, c))){
-                        if(board.getBoardB()[i][j] == ' ') {
-                            moves.add(player + " moves B from 1 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[j] + board.getRow()[i]);
-                        }
-                    }
-                    break;
-                }
-            }
-
-            // move northeast
-            for(int i = r - 1, j = c + 1; i >= 0 && j < 8; i--, j++){
-                if(board.getFromBoard(Board.BOARD_A, i, j) == ' '){
-                    if(board.getBoardB()[i][j] == ' ') {
-                        moves.add(player + " moves B from 1 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[j] + board.getRow()[i]);
-                    }
-                }
-                else{
-                    if(Character.isUpperCase(board.getFromBoard(Board.BOARD_A, i, j)) != Character.isUpperCase(board.getFromBoard(Board.BOARD_A, r, c))){
-                        if(board.getBoardB()[i][j] == ' ') {
-                            moves.add(player + " moves B from 1 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[j] + board.getRow()[i]);
-                        }
-                    }
-                    break;
-                }
-            }
-
-        }
-
-        else{
-            String player = Character.isUpperCase(board.getBoardB()[r][c]) ? "white" : "black";
-
-            // move southeast
-            for(int i = r + 1, j = c + 1; i < 8 && j < 8; i++, j++){
-                if(board.getBoardB()[i][j] == ' '){
-                    if(board.getFromBoard(Board.BOARD_A, i, j) == ' ') {
-                        moves.add(player + " moves B from 2 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[j] + board.getRow()[i]);
-                    }
-                }
-                else{
-                    if(Character.isUpperCase(board.getBoardB()[i][j]) != Character.isUpperCase(board.getBoardB()[r][c])){
-                        if(board.getFromBoard(Board.BOARD_A, i, j) == ' ') {
-                            moves.add(player + " moves B from 2 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[j] + board.getRow()[i]);
-                        }
-                    }
-                    break;
-                }
-            }
-
-            // move southwest
-            for(int i = r + 1, j = c - 1; i < 8 && j >= 0; i++, j--){
-                if(board.getBoardB()[i][j] == ' '){
-                    if(board.getFromBoard(Board.BOARD_A, i, j) == ' ') {
-                        moves.add(player + " moves B from 2 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[j] + board.getRow()[i]);
-                    }
-                }
-                else{
-                    if(Character.isUpperCase(board.getBoardB()[i][j]) != Character.isUpperCase(board.getBoardB()[r][c])){
-                        if(board.getFromBoard(Board.BOARD_A, i, j) == ' ') {
-                            moves.add(player + " moves B from 2 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[j] + board.getRow()[i]);
-                        }
-                    }
-                    break;
-                }
-            }
-
-            // move northwest
-            for(int i = r - 1, j = c - 1; i >= 0 && j >= 0; i--, j--){
-                if(board.getBoardB()[i][j] == ' '){
-                    if(board.getFromBoard(Board.BOARD_A, i, j) == ' ') {
-                        moves.add(player + " moves B from 2 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[j] + board.getRow()[i]);
-                    }
-                }
-                else{
-                    if(Character.isUpperCase(board.getBoardB()[i][j]) != Character.isUpperCase(board.getBoardB()[r][c])){
-                        if(board.getFromBoard(Board.BOARD_A, i, j) == ' ') {
-                            moves.add(player + " moves B from 2 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[j] + board.getRow()[i]);
-                        }
-                    }
-                    break;
-                }
-            }
-
-            // move northeast
-            for(int i = r - 1, j = c + 1; i >= 0 && j < 8; i--, j++){
-                if(board.getBoardB()[i][j] == ' '){
-                    if(board.getFromBoard(Board.BOARD_A, i, j) == ' ') {
-                        moves.add(player + " moves B from 2 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[j] + board.getRow()[i]);
-                    }
-                }
-                else{
-                    if(Character.isUpperCase(board.getBoardB()[i][j]) != Character.isUpperCase(board.getBoardB()[r][c])){
-                        if(board.getFromBoard(Board.BOARD_A, i, j) == ' ') {
-                            moves.add(player + " moves B from 2 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[j] + board.getRow()[i]);
-                        }
-                    }
-                    break;
-                }
-            }
-
         }
     }
 
     private void nextMoves_Q(int boardTag, int pos, List<String> moves){
-        List<String> Q_moves = new ArrayList<String>();
-        nextMoves_R(boardTag, pos, Q_moves);
-        nextMoves_B(boardTag, pos, Q_moves);
-        for(int i = 0; i < Q_moves.size(); i++){
-            String s = Q_moves.get(i);
-            String pre = s.substring(0, 12);
-            String post = s.substring(13);
-            String newStr = pre + 'Q' + post;
-            moves.add(newStr);
-        }
+        int r = pos / 8;
+        int c = pos % 8;
 
+        String player = Character.isUpperCase(board.getFromBoard(boardTag, r, c)) ? "white" : "black";
+
+        // use i and j to indicate the direction of the move, for example (1, 1) refers to moving southeast
+        for(int i = -1; i <= 1; i++){
+            for(int j = -1; j <= 1; j++) {
+                if (!(i == 0 && j == 0)) {
+                    // steps indicates how far the move is from the original position
+                    int steps = 1;
+                    try {
+                        // keep trying while the path is empty, else check if the piece on the path is an enemy piece
+                        while (board.getFromBoard(boardTag, r + i * steps, c + j * steps) == ' ') {
+                            // if the target position on the opposite board is empty and king is safe after the move
+                            // then we can make the move
+                            if (board.getFromBoard((boardTag * 2) % 3, r + i * steps, c + j * steps) == ' ') {
+                                char ch = player.equals("white") ? 'Q' : 'q';
+                                // update the board to check if king is still safe after the rook move
+                                board.setBoard(boardTag, r, c, ' ');
+                                board.setBoard((boardTag * 2) % 3, r + i * steps, c + j * steps, ch);
+                                if (isKingSafe(player)) {
+                                    moves.add(player + " moves " + ch + " from " + boardTag + " " +
+                                            board.getCol()[c] + board.getRow()[r] + " to " +
+                                            board.getCol()[c + j * steps] + board.getRow()[r + i * steps]);
+                                }
+                                // undo the move and restore the board
+                                board.setBoard(boardTag, r, c, ch);
+                                board.setBoard((boardTag * 2) % 3, r + i * steps, c + j * steps, ' ');
+                            }
+                            steps++;
+                        }
+                        // can catch enemy piece
+                        if (Character.isUpperCase(board.getFromBoard(boardTag, r + i * steps, c + j * steps)) ^
+                                player.equals("white")) {
+                            // check if the corresponding position on the other board is empty
+                            if (board.getFromBoard((boardTag * 2) % 3, r + i * steps, c + j * steps) == ' ') {
+                                char ch = player.equals("white") ? 'Q' : 'q';
+                                char enemy = board.getFromBoard(boardTag, r + i * steps, c + j * steps);
+                                // temporarily update the board to check if king is still safe after the rook move
+                                board.setBoard(boardTag, r, c, ' ');
+                                board.setBoard(boardTag, r + i * steps, c + j * steps, ' ');
+                                board.setBoard((boardTag * 2) % 3, r + i * steps, c + j * steps, ch);
+                                if (isKingSafe(player)) {
+                                    moves.add(player + " moves " + ch + " from " + boardTag + " " +
+                                            board.getCol()[c] + board.getRow()[r] + " to " +
+                                            board.getCol()[c + j * steps] + board.getRow()[r + i * steps]);
+                                }
+                                // undo the update
+                                board.setBoard(boardTag, r, c, ch);
+                                board.setBoard(boardTag, r + i * steps, c + j * steps, enemy);
+                                board.setBoard((boardTag * 2) % 3, r + i * steps, c + j * steps, ' ');
+                            }
+                        }
+                    } catch (Exception e) {
+                    }
+                }
+            }
+        }
     }
 
     private void nextMoves_K(int boardTag, int pos, List<String> moves){
         int r = pos / 8;
         int c = pos % 8;
 
-        if(boardTag == 1){
-            String player = Character.isUpperCase(board.getFromBoard(Board.BOARD_A, r, c)) ? "white" : "black";
-            //TODO: castling
+        String player = Character.isUpperCase(board.getFromBoard(boardTag, r, c)) ? "white" : "black";
 
-            // move around by 1 step
-            for(int i = 0; i < 9; i++){
-                if(i != 4){
-                    int r1 = r - 1 + i / 3;
-                    int c1 = c - 1 + i % 3;
-                    if(r1 >= 0 && r1 < 8 && c1 >= 0 && c1 < 8){
-                        if(board.getFromBoard(Board.BOARD_A, r1, c1) == ' '){
-                            if(board.getBoardB()[r1][c1] == ' '){
-                                moves.add(player + " moves K from 1 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[c1] + board.getRow()[r1]);
-                            }
-                        }
-                        else{
-                            if(Character.isUpperCase(board.getFromBoard(Board.BOARD_A, r1, c1)) != Character.isUpperCase(board.getFromBoard(Board.BOARD_A, r, c))){
-                                if(board.getBoardB()[r1][c1] == ' '){
-                                    moves.add(player + " moves K from 1 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[c1] + board.getRow()[r1]);
+        // move around by 1 step
+        for(int i = 0; i < 9; i++){
+            if(i != 4){
+                int r1 = r - 1 + i / 3;
+                int c1 = c - 1 + i % 3;
+                // check if the move is within the board
+                if(r1 >= 0 && r1 < 8 && c1 >= 0 && c1 < 8){
+                    // check if the target position is empty or occupied by an enemy piece
+                    if(board.getFromBoard(boardTag, r1, c1) == ' ' ||
+                            Character.isUpperCase(board.getFromBoard(Board.BOARD_A, r1, c1))
+                            != Character.isUpperCase(board.getFromBoard(Board.BOARD_A, r, c))){
+                        // check if the corresponding position on the other board is empty
+                        if(board.getFromBoard((boardTag * 2) % 3, r1, c1) == ' '){
+                            char ch = player.equals("white") ? 'K' : 'k';
+                            char enemy = board.getFromBoard(boardTag, r1, c1);
+                            // Here we need two rounds of checks, first we need to check if the move is legal on the
+                            // original board. Then we need to check if the move is also legal after the king was
+                            // transferred to the other board
+
+                            board.setBoard(boardTag, r, c, ' ');
+                            board.setBoard(boardTag, r1, c1, ch);
+                            if(isKingSafe(player)) {
+                                // transfer the king to the other board
+                                board.setBoard(boardTag, r1, c1, ' ');
+                                board.setBoard((boardTag * 2) % 3, r1, c1, ch);
+                                if(isKingSafe(player)){
+                                    moves.add(player + " moves " + ch + " from " + boardTag + " " +
+                                            board.getCol()[c] + board.getRow()[r] + " to " +
+                                            board.getCol()[c1] + board.getRow()[r1]);
                                 }
                             }
+                            // undo the update
+                            board.setBoard(boardTag, r, c, ch);
+                            board.setBoard(boardTag, r1, c1, enemy);
+                            board.setBoard((boardTag * 2) % 3, r1, c1, ' ');
                         }
                     }
                 }
             }
         }
+    }
 
+    /**
+     * This function returns true if the king is safe in the current board state
+     *
+     */
+    private boolean isKingSafe(String player) {
+        // get the position of the king
+        int boardTag_K = 0, pos_K = 0, boardTag_k = 0, pos_k = 0;
+        for(int i = 0; i < 64; i++){
+            if(board.getBoardA()[i / 8][i % 8] == 'K'){
+                boardTag_K = 1;
+                pos_K = i;
+            }
+            if(board.getBoardB()[i / 8][i % 8] == 'K'){
+                boardTag_K = 2;
+                pos_K = i;
+            }
+            if(board.getBoardA()[i / 8][i % 8] == 'k'){
+                boardTag_k = 1;
+                pos_k = i;
+            }
+            if(board.getBoardB()[i / 8][i % 8] == 'k'){
+                boardTag_k = 2;
+                pos_k = i;
+            }
+        }
+        int r_K = pos_K / 8;
+        int c_K = pos_K % 8;
+        int r_k = pos_k / 8;
+        int c_k = pos_k % 8;
+
+        // check if king is under attack by an enemy pawn
+        if(player.equals("white")){
+            try {
+                if (board.getFromBoard(boardTag_K, r_K - 1, c_K - 1) == 'p' ||
+                        board.getFromBoard(boardTag_K, r_K - 1, c_K + 1) == 'p') {
+                    return false;
+                }
+            }
+            catch (Exception e){}
+        }
         else{
-            String player = Character.isUpperCase(board.getBoardB()[r][c]) ? "white" : "black";
+            try {
+                if (board.getFromBoard(boardTag_k, r_k + 1, c_k - 1) == 'P' ||
+                        board.getFromBoard(boardTag_k, r_k + 1, c_k + 1) == 'P') {
+                    return false;
+                }
+            }
+            catch (Exception e){}
+        }
 
-            // move around by 1 step
-            for(int i = 0; i < 9; i++){
-                if(i != 4){
-                    int r1 = r - 1 + i / 3;
-                    int c1 = c - 1 + i % 3;
-                    if(r1 >= 0 && r1 < 8 && c1 >= 0 && c1 < 8){
-                        if(board.getBoardB()[r1][c1] == ' '){
-                            if(board.getFromBoard(Board.BOARD_A, r1, c1) == ' '){
-                                moves.add(player + " moves K from 1 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[c1] + board.getRow()[r1]);
+        // check knight
+        List<List<Integer>> candidates = new ArrayList<List<Integer>>();
+        if(player.equals("white")) {
+            candidates.add(Arrays.asList(r_K + 1, c_K + 2));
+            candidates.add(Arrays.asList(r_K + 2, c_K + 1));
+            candidates.add(Arrays.asList(r_K + 2, c_K - 1));
+            candidates.add(Arrays.asList(r_K + 1, c_K - 2));
+            candidates.add(Arrays.asList(r_K - 1, c_K - 2));
+            candidates.add(Arrays.asList(r_K - 2, c_K - 1));
+            candidates.add(Arrays.asList(r_K - 2, c_K + 1));
+            candidates.add(Arrays.asList(r_K - 1, c_K + 2));
+            for (List<Integer> list : candidates) {
+                try {
+                    if (board.getFromBoard(boardTag_K, list.get(0), list.get(1)) == 'n') return false;
+                }
+                catch (Exception e) {}
+            }
+        }
+        else{
+            candidates.add(Arrays.asList(r_k + 1, c_k + 2));
+            candidates.add(Arrays.asList(r_k + 2, c_k + 1));
+            candidates.add(Arrays.asList(r_k + 2, c_k - 1));
+            candidates.add(Arrays.asList(r_k + 1, c_k - 2));
+            candidates.add(Arrays.asList(r_k - 1, c_k - 2));
+            candidates.add(Arrays.asList(r_k - 2, c_k - 1));
+            candidates.add(Arrays.asList(r_k - 2, c_k + 1));
+            candidates.add(Arrays.asList(r_k - 1, c_k + 2));
+            for (List<Integer> list : candidates) {
+                try {
+                    if (board.getFromBoard(boardTag_k, list.get(0), list.get(1)) == 'N') return false;
+                }
+                catch (Exception e) {}
+            }
+        }
+
+        // check bishop or queen
+        if(player.equals("white")) {
+            // use i and j to indicate the direction of the move, for example (1, 1) refers to moving southeast
+            for (int i = -1; i <= 1; i += 2) {
+                for (int j = -1; j <= 1; j += 2) {
+                    // steps indicates how far the move is from the original position
+                    int steps = 1;
+                    try {
+                        // keep trying while the path is empty, else check if the piece on the path is an enemy piece
+                        while (board.getFromBoard(boardTag_K, r_K + i * steps, c_K + j * steps) == ' ') {
+                            steps++;
+                        }
+                        if (board.getFromBoard(boardTag_K, r_K + i * steps, c_K + j * steps) == 'b' ||
+                                board.getFromBoard(boardTag_K, r_K + i * steps, c_K + j * steps) == 'q') {
+                            return false;
+                        }
+                    }
+                    catch (Exception e) {}
+                }
+            }
+        }
+        else{
+            // use i and j to indicate the direction of the move, for example (1, 1) refers to moving southeast
+            for (int i = -1; i <= 1; i += 2) {
+                for (int j = -1; j <= 1; j += 2) {
+                    // steps indicates how far the move is from the original position
+                    int steps = 1;
+                    try {
+                        // keep trying while the path is empty, else check if the piece on the path is an enemy piece
+                        while (board.getFromBoard(boardTag_k, r_k + i * steps, c_k + j * steps) == ' ') {
+                            steps++;
+                        }
+                        if (board.getFromBoard(boardTag_k, r_k + i * steps, c_k + j * steps) == 'B' ||
+                                board.getFromBoard(boardTag_k, r_k + i * steps, c_k + j * steps) == 'Q') {
+                            return false;
+                        }
+                    }
+                    catch (Exception e) {}
+                }
+            }
+        }
+
+        // check rook or queen
+        if(player.equals("white")){
+            for(int i = -1; i <= 1; i++){
+                for(int j = -1; j <= 1; j++){
+                    if((i == 0 && j != 0) || (i != 0 && j == 0)){
+                        // steps indicates how far the move is from the original position
+                        int steps = 1;
+                        try{
+                            // keep trying while the path is empty, else check if the piece on the path is an enemy piece
+                            while(board.getFromBoard(boardTag_K, r_K + i * steps, c_K + j * steps) == ' '){
+                                steps++;
+                            }
+                            if(board.getFromBoard(boardTag_K, r_K + i * steps, c_K + j * steps) == 'r' ||
+                                    board.getFromBoard(boardTag_K, r_K + i * steps, c_K + j * steps) == 'q'){
+                                return false;
                             }
                         }
-                        else{
-                            if(Character.isUpperCase(board.getFromBoard(Board.BOARD_A, r1, c1)) != Character.isUpperCase(board.getFromBoard(Board.BOARD_A, r, c))){
-                                if(board.getFromBoard(Board.BOARD_A, r1, c1) == ' '){
-                                    moves.add(player + " moves K from 1 " + board.getCol()[c] + board.getRow()[r] + " to " + board.getCol()[c1] + board.getRow()[r1]);
-                                }
+                        catch (Exception e){}
+                    }
+                }
+            }
+        }
+        else{
+            for(int i = -1; i <= 1; i++){
+                for(int j = -1; j <= 1; j++){
+                    if((i == 0 && j != 0) || (i != 0 && j == 0)){
+                        // steps indicates how far the move is from the original position
+                        int steps = 1;
+                        try{
+                            // keep trying while the path is empty, else check if the piece on the path is an enemy piece
+                            while(board.getFromBoard(boardTag_k, r_k + i * steps, c_k + j * steps) == ' '){
+                                steps++;
                             }
+                            if(board.getFromBoard(boardTag_k, r_k + i * steps, c_k + j * steps) == 'R' ||
+                                    board.getFromBoard(boardTag_k, r_k + i * steps, c_k + j * steps) == 'Q'){
+                                return false;
+                            }
+                        }
+                        catch (Exception e){}
+                    }
+                }
+            }
+        }
+
+        // check king
+        if(player.equals("white")){
+            for(int i = 0; i < 9; i++) {
+                if (i != 4) {
+                    int r1 = r_K - 1 + i / 3;
+                    int c1 = c_K - 1 + i % 3;
+                    // check if the position is within the board
+                    if (r1 >= 0 && r1 < 8 && c1 >= 0 && c1 < 8) {
+                        if (board.getFromBoard(boardTag_K, r1, c1) == 'k') {
+                            return false;
                         }
                     }
                 }
             }
-
         }
+        else{
+            for(int i = 0; i < 9; i++) {
+                if (i != 4) {
+                    int r1 = r_k - 1 + i / 3;
+                    int c1 = c_k - 1 + i % 3;
+                    // check if the position is within the board
+                    if (r1 >= 0 && r1 < 8 && c1 >= 0 && c1 < 8) {
+                        if (board.getFromBoard(boardTag_k, r1, c1) == 'K') {
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+
+
+        return true;
     }
 
     /**
@@ -762,7 +687,28 @@ public class BaseAliceAIImpl implements AliceAI {
         	board.getBoardA()[row][col] = board.getBoardB()[preRow][preCol];
             board.getBoardB()[preRow][preCol] = ' ';
         }
+        printboard();
+    }
 
-
+    public void printboard(){
+        for(int i = 0; i < 10; i++){
+            System.out.println();
+        }
+        for(int i = 0; i < 8; i++){
+            for(char c : board.getBoardA()[i]){
+                if(c == ' ') {
+                    c = '-';
+                }
+                System.out.print(c + " ");
+            }
+            System.out.print("  ");
+            for(char c : board.getBoardB()[i]){
+                if(c == ' ') {
+                    c = '-';
+                }
+                System.out.print(c + " ");
+            }
+            System.out.println();
+        }
     }
 }
