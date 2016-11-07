@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="e9169f7d-524b-4d5d-ae9e-1f3fcbf76ce2" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/aliceApp1/src/ai/BaseAliceAIImpl.java" afterPath="$PROJECT_DIR$/aliceApp1/src/ai/BaseAliceAIImpl.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/aliceApp1/src/main/Main.java" afterPath="$PROJECT_DIR$/aliceApp1/src/main/Main.java" />
     </list>
     <ignored path="AliceChess.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -23,26 +24,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="BaseAliceAIImpl.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="BaseAliceAIImpl.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/aliceApp1/src/ai/BaseAliceAIImpl.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17628">
-              <caret line="684" column="17" selection-start-line="684" selection-start-column="17" selection-end-line="684" selection-end-column="17" />
-              <folding>
-                <element signature="e#1086#1094#0" expanded="true" />
-                <element signature="e#2823#2831#0" expanded="true" />
-                <element signature="e#7800#7815#0" expanded="true" />
-                <element signature="e#26440#26455#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="-1115">
+              <caret line="138" column="93" selection-start-line="138" selection-start-column="93" selection-end-line="138" selection-end-column="93" />
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Main.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/aliceApp1/src/main/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="520">
-              <caret line="26" column="52" selection-start-line="26" selection-start-column="52" selection-end-line="26" selection-end-column="52" />
+            <state relative-caret-position="390">
+              <caret line="36" column="66" selection-start-line="36" selection-start-column="66" selection-end-line="36" selection-end-column="66" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -53,7 +49,7 @@
       <file leaf-file-name="Board.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/aliceApp1/src/model/Board.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1690">
+            <state relative-caret-position="1051">
               <caret line="65" column="19" selection-start-line="65" selection-start-column="19" selection-end-line="65" selection-end-column="19" />
               <folding />
             </state>
@@ -73,9 +69,9 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/aliceApp1/src/main/Main.java" />
         <option value="$PROJECT_DIR$/aliceApp1/src/model/Board.java" />
         <option value="$PROJECT_DIR$/aliceApp1/src/ai/BaseAliceAIImpl.java" />
+        <option value="$PROJECT_DIR$/aliceApp1/src/main/Main.java" />
       </list>
     </option>
   </component>
@@ -111,6 +107,7 @@
     </navigator>
     <panes>
       <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
@@ -200,7 +197,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="RunManager" selected="Application.Main">
@@ -492,7 +488,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
@@ -544,12 +540,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#1086#1094#0" expanded="true" />
-            <element signature="e#2823#2831#0" expanded="true" />
-            <element signature="e#7800#7815#0" expanded="true" />
-            <element signature="e#26440#26455#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -575,12 +566,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#1086#1094#0" expanded="true" />
-            <element signature="e#2823#2831#0" expanded="true" />
-            <element signature="e#7800#7815#0" expanded="true" />
-            <element signature="e#26440#26455#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -606,12 +592,33 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/aliceApp1/src/main/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="520">
+          <caret line="26" column="52" selection-start-line="26" selection-start-column="52" selection-end-line="26" selection-end-column="52" />
           <folding>
-            <element signature="e#1086#1094#0" expanded="true" />
-            <element signature="e#2823#2831#0" expanded="true" />
-            <element signature="e#7800#7815#0" expanded="true" />
-            <element signature="e#26440#26455#0" expanded="true" />
+            <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/aliceApp1/src/model/Board.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1690">
+          <caret line="65" column="19" selection-start-line="65" selection-start-column="19" selection-end-line="65" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/aliceApp1/src/ai/BaseAliceAIImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -640,19 +647,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/aliceApp1/src/main/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="520">
-          <caret line="26" column="52" selection-start-line="26" selection-start-column="52" selection-end-line="26" selection-end-column="52" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/aliceApp1/src/model/Board.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1690">
+        <state relative-caret-position="1051">
           <caret line="65" column="19" selection-start-line="65" selection-start-column="19" selection-end-line="65" selection-end-column="19" />
           <folding />
         </state>
@@ -660,13 +657,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/aliceApp1/src/ai/BaseAliceAIImpl.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17628">
-          <caret line="684" column="17" selection-start-line="684" selection-start-column="17" selection-end-line="684" selection-end-column="17" />
+        <state relative-caret-position="-1115">
+          <caret line="138" column="93" selection-start-line="138" selection-start-column="93" selection-end-line="138" selection-end-column="93" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/aliceApp1/src/main/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="36" column="66" selection-start-line="36" selection-start-column="66" selection-end-line="36" selection-end-column="66" />
           <folding>
-            <element signature="e#1086#1094#0" expanded="true" />
-            <element signature="e#2823#2831#0" expanded="true" />
-            <element signature="e#7800#7815#0" expanded="true" />
-            <element signature="e#26440#26455#0" expanded="true" />
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>

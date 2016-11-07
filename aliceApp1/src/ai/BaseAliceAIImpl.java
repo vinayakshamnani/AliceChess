@@ -141,10 +141,11 @@ public class BaseAliceAIImpl implements AliceAI {
                 }
                 //undo update
                 board.setBoard(boardTag, r, c, ch);
-                board.setBoard((boardTag * 2) % 3, r - 2, c, ' ');
+                board.setBoard((boardTag * 2) % 3, r + 2 * dir, c, ' ');
             }
         }
         else{
+            // TODO: promotion not considered yet
             //move forward by 1 step
             if(board.getFromBoard(boardTag, r + dir, c) == ' ' &&
                     board.getFromBoard((boardTag * 2) % 3, r + dir, c) == ' '){

@@ -31,7 +31,22 @@ public class Main {
             String read = sc.nextLine();
             if(read.substring(6, 11).equals("moves")) {
             	moveCount++;
-                //TODO:first check if the move is legal, if it is, update the board
+                // TODO: what should we do if we find the referee passed an illegal move?
+                // check if the move is legal, if it is, update the board
+                if(player.equals("white")){
+                    List<String> legalMoves = ai.nextBlackMoves();
+                    if(!legalMoves.contains(read)){
+                        System.out.println("Illegal move!");
+                        break;
+                    }
+                }
+                else{
+                    List<String> legalMoves = ai.nextWhiteMoves();
+                    if(!legalMoves.contains(read)){
+                        System.out.println("Illegal move!");
+                        break;
+                    }
+                }
             	ai.update(read);
 
                 // TODO : remove the counter once we have a better AI
