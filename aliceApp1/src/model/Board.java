@@ -62,8 +62,8 @@ public class Board {
     	return board == BOARD_A ? boardA[row][col] : boardB[row][col];
     }
 
-	public void setBoard(int board, int row, int col, char ch) {
-		if(board == BOARD_A) {
+	public void setBoard(int boardTag, int row, int col, char ch) {
+		if(boardTag == BOARD_A) {
 			boardA[row][col] = ch;
 		}
 		else{
