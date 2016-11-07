@@ -427,8 +427,7 @@ public class BaseAliceAIImpl implements AliceAI {
                 if(r1 >= 0 && r1 < 8 && c1 >= 0 && c1 < 8){
                     // check if the target position is empty or occupied by an enemy piece
                     if(board.getFromBoard(boardTag, r1, c1) == ' ' ||
-                            Character.isUpperCase(board.getFromBoard(Board.BOARD_A, r1, c1))
-                            != Character.isUpperCase(board.getFromBoard(Board.BOARD_A, r, c))){
+                            player.equals("white") != Character.isUpperCase(board.getFromBoard(boardTag, r1, c1))){
                         // check if the corresponding position on the other board is empty
                         if(board.getFromBoard((boardTag * 2) % 3, r1, c1) == ' '){
                             char ch = player.equals("white") ? 'K' : 'k';
@@ -660,8 +659,6 @@ public class BaseAliceAIImpl implements AliceAI {
                 }
             }
         }
-
-
         return true;
     }
 
@@ -672,25 +669,23 @@ public class BaseAliceAIImpl implements AliceAI {
     public void update(String s) {
     	// From the input message, find out which board it is, the piece, the row and column
     	//  it has moved from and to.
-        char boardTag = s.charAt(19);
+        int boardTag = s.charAt(19) - '0';
+        char ch = s.charAt(12);
         int preCol = s.charAt(21) - 'a';
         int preRow = 8 - (s.charAt(22) - '0');
         int col = s.charAt(27) - 'a';
         int row = 8 - (s.charAt(28) - '0');
 
         // Just update the board.
-        if(boardTag == '1'){
-            board.getBoardB()[row][col] = board.getFromBoard(Board.BOARD_A, preRow, preCol);
-            board.getBoardA()[preRow][preCol] = ' ';
-        }
-        else{
-        	board.getBoardA()[row][col] = board.getBoardB()[preRow][preCol];
-            board.getBoardB()[preRow][preCol] = ' ';
-        }
-        printboard();
+        board.setBoard(boardTag, preRow, preCol, ' ');
+        board.setBoard(boardTag, row, col, ' ');
+        board.setBoard((boardTag * 2) % 3, row, col, ch);
+
+
+        // printBoard();
     }
 
-    public void printboard(){
+    public void printBoard(){
         for(int i = 0; i < 10; i++){
             System.out.println();
         }
