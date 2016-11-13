@@ -17,14 +17,15 @@ public class Main {
         int moveCount = 0;
         Random rand = new Random();
 
+
         String readColor = sc.nextLine();
         String player = readColor.equals("you are white") ? "white" : "black";
 
         //white first move
         if(player.equals("white")) {
             List<String> whiteFirstMoves = ai.nextWhiteMoves();
-            ai.update(whiteFirstMoves.get(3));
-            System.out.println(whiteFirstMoves.get(3));
+            ai.update(whiteFirstMoves.get(4));
+            System.out.println(whiteFirstMoves.get(4));
         }
 
         while(isStarted){
@@ -61,10 +62,10 @@ public class Main {
                     	System.out.println(player + " surrenders");
                         break;
                     }
-                    String theMove = whiteMoves.get(rand.nextInt(whiteMoves.size()));
-                    ai.update(theMove);
+                    String bestMove = ai.pickBestMove(true);
+                    ai.update(bestMove);
                     // for(String s : whiteMoves) System.out.println(s);
-                    System.out.println(theMove);
+                    System.out.println(bestMove);
                 }
                 else{
                     List<String> blackMoves = ai.nextBlackMoves();
@@ -72,12 +73,18 @@ public class Main {
                     	System.out.println(player + " surrenders");
                         break;
                     }
-                    String theMove = blackMoves.get(rand.nextInt(blackMoves.size()));
-                    ai.update(theMove);
-                    System.out.println(theMove);
+                    String bestMove = ai.pickBestMove(false);
+                    ai.update(bestMove);
+                    System.out.println(bestMove);
                 }
                 
 
+            }
+            else if(read.substring(6, 11).equals("offers")){
+                System.out.println(player + " accepts draw");
+            }
+            else if(read.substring(6, 13).equals("declines")){
+                System.out.println(player + " surrenders");
             }
             else isStarted = false;
         }

@@ -44,4 +44,12 @@ public interface AliceAI {
 	 * @return List - List of filtered moves that are 'smarter' than the input List.
 	 */
 	List<String> filterMoves(List<String> validMoves);
+
+	/**
+	 * pick the best next move for the current player using miniMax algorithm
+	 *
+	 * @param isMaxPlayer - true for white and false for black.
+	 * @return String - a string representing the best next move for the current player.
+	 */
+	String pickBestMove(boolean isMaxPlayer);
 }

@@ -136,51 +136,52 @@ public class BaseAliceAIImpl implements AliceAI {
                 board.setBoard(boardTag, r, c, ' ');
                 board.setBoard((boardTag * 2) % 3, r + 2 * dir, c, ch);
                 if(isKingSafe(player)) {
-                    moves.add(player + " moves " + ch + " from " + boardTag + " " + board.getCol()[c] + board.getRow()[r]
-                            + " to " + board.getCol()[c] + board.getRow()[r + 2 * dir]);
+                    moves.add(player + " moves " + ch + " from " + boardTag + " " + board.getCol()[c] +
+                            board.getRow()[r] + " to " + board.getCol()[c] + board.getRow()[r + 2 * dir]);
                 }
                 //undo update
                 board.setBoard(boardTag, r, c, ch);
                 board.setBoard((boardTag * 2) % 3, r + 2 * dir, c, ' ');
             }
         }
-        else{
-            // TODO: promotion not considered yet
-            //move forward by 1 step
-            if(board.getFromBoard(boardTag, r + dir, c) == ' ' &&
-                    board.getFromBoard((boardTag * 2) % 3, r + dir, c) == ' '){
-                // temporarily update the board to check if the king is still safe after the move
-                board.setBoard(boardTag, r, c, ' ');
-                board.setBoard((boardTag * 2) % 3, r + dir, c, ch);
-                if(isKingSafe(player)) {
-                    moves.add(player + " moves " + ch + " from " + boardTag + " " + board.getCol()[c] + board.getRow()[r]
-                            + " to " + board.getCol()[c] + board.getRow()[r + dir]);
-                }
-                //undo update
-                board.setBoard(boardTag, r, c, ch);
-                board.setBoard((boardTag * 2) % 3, r + dir, c, ' ');
+
+        // TODO: promotion not considered yet
+        //move forward by 1 step
+        if(board.getFromBoard(boardTag, r + dir, c) == ' ' &&
+                board.getFromBoard((boardTag * 2) % 3, r + dir, c) == ' '){
+            // temporarily update the board to check if the king is still safe after the move
+            board.setBoard(boardTag, r, c, ' ');
+            board.setBoard((boardTag * 2) % 3, r + dir, c, ch);
+            if(isKingSafe(player)) {
+                moves.add(player + " moves " + ch + " from " + boardTag + " " + board.getCol()[c] +
+                        board.getRow()[r] + " to " + board.getCol()[c] + board.getRow()[r + dir]);
             }
-            //catch enemy piece
-            try{
-                for(int i = -1; i <= 1; i+=2) {
-                    if (Character.isLowerCase(board.getFromBoard(boardTag, r + dir, c + i))
-                            && board.getFromBoard((boardTag * 2) % 3, r + dir, c + i) == ' '){
-                        char enemy = board.getFromBoard(boardTag, r + dir, c + i);
-                        // temporarily update the board to check if the king is still safe after the move
-                        board.setBoard(boardTag, r, c, ' ');
-                        board.setBoard((boardTag * 2) % 3, r + dir, c + i, ch);
-                        if (isKingSafe(player)) {
-                            moves.add(player + " moves " + ch + " from " + boardTag + " " + board.getCol()[c] + board.getRow()[r] +
-                                    " to " + board.getCol()[c + i] + board.getRow()[r + dir]);
-                        }
-                        //undo update
-                        board.setBoard(boardTag, r, c, 'P');
-                        board.setBoard(boardTag, r + dir, c + i, enemy);
-                        board.setBoard((boardTag * 2) % 3, r + dir, c + i, ' ');
-                    }
-                }
-            }catch (Exception e){}
+            //undo update
+            board.setBoard(boardTag, r, c, ch);
+            board.setBoard((boardTag * 2) % 3, r + dir, c, ' ');
         }
+        //catch enemy piece
+        try{
+            for(int i = -1; i <= 1; i+=2) {
+                if (board.getFromBoard(boardTag, r + dir, c + i) != ' ' &&
+                        Character.isUpperCase(board.getFromBoard(boardTag, r + dir, c + i)) != player.equals("white")
+                        && board.getFromBoard((boardTag * 2) % 3, r + dir, c + i) == ' '){
+                    char enemy = board.getFromBoard(boardTag, r + dir, c + i);
+                    // temporarily update the board to check if the king is still safe after the move
+                    board.setBoard(boardTag, r, c, ' ');
+                    board.setBoard((boardTag * 2) % 3, r + dir, c + i, ch);
+                    if (isKingSafe(player)) {
+                        moves.add(player + " moves " + ch + " from " + boardTag + " " + board.getCol()[c] +
+                                board.getRow()[r] + " to " + board.getCol()[c + i] + board.getRow()[r + dir]);
+                    }
+                    //undo update
+                    board.setBoard(boardTag, r, c, ch);
+                    board.setBoard(boardTag, r + dir, c + i, enemy);
+                    board.setBoard((boardTag * 2) % 3, r + dir, c + i, ' ');
+                }
+            }
+        }catch (Exception e){}
+
     }
 
     private void nextMoves_N(int boardTag, int pos, List<String> moves){
@@ -263,7 +264,7 @@ public class BaseAliceAIImpl implements AliceAI {
                             steps++;
                         }
                         // can catch enemy piece
-                        if(Character.isUpperCase(board.getFromBoard(boardTag, r + i * steps, c + j * steps)) ^
+                        if(Character.isUpperCase(board.getFromBoard(boardTag, r + i * steps, c + j * steps)) !=
                                 player.equals("white")){
                             if(board.getFromBoard((boardTag * 2) % 3, r + i * steps, c + j * steps) == ' '){
                                 char ch = player.equals("white") ? 'R' : 'r';
@@ -324,7 +325,7 @@ public class BaseAliceAIImpl implements AliceAI {
                         steps++;
                     }
                     // can catch enemy piece
-                    if(Character.isUpperCase(board.getFromBoard(boardTag, r + i * steps, c + j * steps)) ^
+                    if(Character.isUpperCase(board.getFromBoard(boardTag, r + i * steps, c + j * steps)) !=
                             player.equals("white")){
                         // check if the corresponding position on the other board is empty
                         if(board.getFromBoard((boardTag * 2) % 3, r + i * steps, c + j * steps) == ' '){
@@ -385,7 +386,7 @@ public class BaseAliceAIImpl implements AliceAI {
                             steps++;
                         }
                         // can catch enemy piece
-                        if (Character.isUpperCase(board.getFromBoard(boardTag, r + i * steps, c + j * steps)) ^
+                        if (Character.isUpperCase(board.getFromBoard(boardTag, r + i * steps, c + j * steps)) !=
                                 player.equals("white")) {
                             // check if the corresponding position on the other board is empty
                             if (board.getFromBoard((boardTag * 2) % 3, r + i * steps, c + j * steps) == ' ') {
@@ -595,7 +596,8 @@ public class BaseAliceAIImpl implements AliceAI {
                         // steps indicates how far the move is from the original position
                         int steps = 1;
                         try{
-                            // keep trying while the path is empty, else check if the piece on the path is an enemy piece
+                            // keep trying while the path is empty, else check if the piece on the path is an enemy
+                            // piece
                             while(board.getFromBoard(boardTag_K, r_K + i * steps, c_K + j * steps) == ' '){
                                 steps++;
                             }
@@ -616,7 +618,8 @@ public class BaseAliceAIImpl implements AliceAI {
                         // steps indicates how far the move is from the original position
                         int steps = 1;
                         try{
-                            // keep trying while the path is empty, else check if the piece on the path is an enemy piece
+                            // keep trying while the path is empty, else check if the piece on the path is an enemy
+                            // piece
                             while(board.getFromBoard(boardTag_k, r_k + i * steps, c_k + j * steps) == ' '){
                                 steps++;
                             }
@@ -683,10 +686,10 @@ public class BaseAliceAIImpl implements AliceAI {
         board.setBoard((boardTag * 2) % 3, row, col, ch);
 
 
-        // printBoard();
+        printBoard();
     }
 
-    public void printBoard(){
+    private void printBoard() {
         for(int i = 0; i < 10; i++){
             System.out.println();
         }
@@ -706,5 +709,186 @@ public class BaseAliceAIImpl implements AliceAI {
             }
             System.out.println();
         }
+    }
+
+
+    /**
+     * This is function pick the best move for the current player,
+     * where white is the maxPlayer and black the minPlayer
+     *
+     */
+    public String pickBestMove(boolean isMaxPlayer) {
+        final int DEPTH = 4;
+        return miniMax(DEPTH, isMaxPlayer);
+    }
+
+    private String miniMax(int depth, boolean isMaxPlayer){
+        String bestMove = "";
+        int highValue = Integer.MIN_VALUE;
+        int lowValue = Integer.MAX_VALUE;
+        int currentValue;
+
+        List<String> nextMoves = isMaxPlayer ? nextWhiteMoves() : nextBlackMoves();
+
+        for(String s : nextMoves){
+            int boardTag = s.charAt(19) - '0';
+            char ch = s.charAt(12);
+            int preCol = s.charAt(21) - 'a';
+            int preRow = 8 - (s.charAt(22) - '0');
+            int col = s.charAt(27) - 'a';
+            int row = 8 - (s.charAt(28) - '0');
+            char preChar = board.getFromBoard(boardTag, row, col);
+            //update board
+            board.setBoard(boardTag, preRow, preCol, ' ');
+            board.setBoard(boardTag, row, col, ' ');
+            board.setBoard((boardTag * 2) % 3, row, col, ch);
+
+            currentValue = isMaxPlayer ? min(depth - 1) : max(depth - 1);
+            if(isMaxPlayer && currentValue > highValue){
+                highValue = currentValue;
+                bestMove = s;
+            }
+            else if(!isMaxPlayer && currentValue < lowValue){
+                lowValue = currentValue;
+                bestMove = s;
+            }
+
+            //undoUpdate
+            board.setBoard(boardTag, preRow, preCol, ch);
+            board.setBoard(boardTag, row, col, preChar);
+            board.setBoard((boardTag * 2) % 3, row, col, ' ');
+
+        }
+        return bestMove;
+    }
+
+    private int max(int depth) {
+        if (depth == 0) {
+            return evaluate(true);
+        }
+
+        int bestValue = Integer.MIN_VALUE;
+        List<String> nextWhiteMoves = nextWhiteMoves();
+        if (nextWhiteMoves.size() == 0) return bestValue;
+        for (String s : nextWhiteMoves) {
+            int boardTag = s.charAt(19) - '0';
+            char ch = s.charAt(12);
+            int preCol = s.charAt(21) - 'a';
+            int preRow = 8 - (s.charAt(22) - '0');
+            int col = s.charAt(27) - 'a';
+            int row = 8 - (s.charAt(28) - '0');
+            char preChar = board.getFromBoard(boardTag, row, col);
+            //update board
+            board.setBoard(boardTag, preRow, preCol, ' ');
+            board.setBoard(boardTag, row, col, ' ');
+            board.setBoard((boardTag * 2) % 3, row, col, ch);
+
+            int value = min(depth - 1);
+            bestValue = Math.max(bestValue, value);
+
+            //undoUpdate
+            board.setBoard(boardTag, preRow, preCol, ch);
+            board.setBoard(boardTag, row, col, preChar);
+            board.setBoard((boardTag * 2) % 3, row, col, ' ');
+        }
+        return bestValue;
+    }
+
+    private int min(int depth) {
+        if (depth == 0) {
+            return evaluate(false);
+        }
+
+        int bestValue = Integer.MAX_VALUE;
+        List<String> nextBlackMoves = nextBlackMoves();
+        if(nextBlackMoves.size() == 0) return bestValue;
+        for(String s : nextBlackMoves){
+            int boardTag = s.charAt(19) - '0';
+            char ch = s.charAt(12);
+            int preCol = s.charAt(21) - 'a';
+            int preRow = 8 - (s.charAt(22) - '0');
+            int col = s.charAt(27) - 'a';
+            int row = 8 - (s.charAt(28) - '0');
+            char preChar = board.getFromBoard(boardTag, row, col);
+            //update board
+            board.setBoard(boardTag, preRow, preCol, ' ');
+            board.setBoard(boardTag, row, col, ' ');
+            board.setBoard((boardTag * 2) % 3, row, col, ch);
+
+            int value = max(depth - 1);
+            bestValue = Math.min(bestValue, value);
+
+            //undoUpdate
+            board.setBoard(boardTag, preRow, preCol, ch);
+            board.setBoard(boardTag, row, col, preChar);
+            board.setBoard((boardTag * 2) % 3, row, col, ' ');
+        }
+        return bestValue;
+    }
+
+    private int evaluate(boolean isMaxPlayer){
+        int sumWhite = 0;
+        int sumBlack = 0;
+
+        for(int i = 0; i < 64; i++){
+            switch (board.getBoardA()[i / 8][i % 8]){
+                case 'P' : sumWhite += 1;
+                    break;
+                case 'R' : sumWhite += 5;
+                    break;
+                case 'N' : sumWhite += 3;
+                    break;
+                case 'B' : sumWhite += 4;
+                    break;
+                case 'Q' : sumWhite += 10;
+                    break;
+                case 'K' : sumWhite += 0;
+                    break;
+                case 'p' : sumBlack += 1;
+                    break;
+                case 'r' : sumBlack += 5;
+                    break;
+                case 'n' : sumBlack += 3;
+                    break;
+                case 'b' : sumBlack += 4;
+                    break;
+                case 'q' : sumBlack += 10;
+                    break;
+                case 'k' : sumBlack += 0;
+                    break;
+            }
+        }
+
+        /* Loop through the second board and find out all possible moves that can be made. */
+        for(int i = 0; i < 64; i++){
+            switch (board.getBoardB()[i / 8][i % 8]){
+                case 'P' : sumWhite += 1;
+                    break;
+                case 'R' : sumWhite += 5;
+                    break;
+                case 'N' : sumWhite += 3;
+                    break;
+                case 'B' : sumWhite += 4;
+                    break;
+                case 'Q' : sumWhite += 10;
+                    break;
+                case 'K' : sumWhite += 0;
+                    break;
+                case 'p' : sumBlack += 1;
+                    break;
+                case 'r' : sumBlack += 5;
+                    break;
+                case 'n' : sumBlack += 3;
+                    break;
+                case 'b' : sumBlack += 4;
+                    break;
+                case 'q' : sumBlack += 10;
+                    break;
+                case 'k' : sumBlack += 0;
+                    break;
+            }
+        }
+        int res = sumWhite - sumBlack;
+        return isMaxPlayer ? res : -res;
     }
 }
