@@ -685,8 +685,7 @@ public class BaseAliceAIImpl implements AliceAI {
         board.setBoard(boardTag, row, col, ' ');
         board.setBoard((boardTag * 2) % 3, row, col, ch);
 
-
-        printBoard();
+        //printBoard();
     }
 
     private void printBoard() {
@@ -713,7 +712,7 @@ public class BaseAliceAIImpl implements AliceAI {
 
 
     /**
-     * This is function pick the best move for the current player,
+     * This function picks the best move for the current player,
      * where white is the maxPlayer and black the minPlayer
      *
      */
@@ -826,10 +825,17 @@ public class BaseAliceAIImpl implements AliceAI {
         return bestValue;
     }
 
+    /**
+     * This function evaluate the current board and return a score which is calculated by considering
+     * the pieces, check, move ability, and ...
+     *
+     */
     private int evaluate(boolean isMaxPlayer){
+        // scores of white and black
         int sumWhite = 0;
         int sumBlack = 0;
 
+        // add the weight of active pieces to score
         for(int i = 0; i < 64; i++){
             switch (board.getBoardA()[i / 8][i % 8]){
                 case 'P' : sumWhite += 1;
@@ -859,7 +865,6 @@ public class BaseAliceAIImpl implements AliceAI {
             }
         }
 
-        /* Loop through the second board and find out all possible moves that can be made. */
         for(int i = 0; i < 64; i++){
             switch (board.getBoardB()[i / 8][i % 8]){
                 case 'P' : sumWhite += 1;
@@ -888,6 +893,11 @@ public class BaseAliceAIImpl implements AliceAI {
                     break;
             }
         }
+
+        // add points for check
+        if(!isKingSafe("white")) sumBlack -= 2;
+        if(!isKingSafe("black")) sumWhite += 2;
+
         int res = sumWhite - sumBlack;
         return isMaxPlayer ? res : -res;
     }
