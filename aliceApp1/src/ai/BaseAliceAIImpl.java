@@ -169,6 +169,7 @@ public class BaseAliceAIImpl implements AliceAI {
                     char enemy = board.getFromBoard(boardTag, r + dir, c + i);
                     // temporarily update the board to check if the king is still safe after the move
                     board.setBoard(boardTag, r, c, ' ');
+                    board.setBoard(boardTag, r + dir, c + i, ' ');
                     board.setBoard((boardTag * 2) % 3, r + dir, c + i, ch);
                     if (isKingSafe(player)) {
                         moves.add(player + " moves " + ch + " from " + boardTag + " " + board.getCol()[c] +
@@ -685,13 +686,10 @@ public class BaseAliceAIImpl implements AliceAI {
         board.setBoard(boardTag, row, col, ' ');
         board.setBoard((boardTag * 2) % 3, row, col, ch);
 
-        //printBoard();
+        // printBoard();
     }
 
     private void printBoard() {
-        for(int i = 0; i < 10; i++){
-            System.out.println();
-        }
         for(int i = 0; i < 8; i++){
             for(char c : board.getBoardA()[i]){
                 if(c == ' ') {
@@ -895,8 +893,16 @@ public class BaseAliceAIImpl implements AliceAI {
         }
 
         // add points for check
-        if(!isKingSafe("white")) sumBlack -= 2;
-        if(!isKingSafe("black")) sumWhite += 2;
+        if(!isKingSafe("white")) sumBlack -= 20;
+        if(!isKingSafe("black")) sumWhite += 20;
+
+        // add points for move ability
+//        if(isMaxPlayer){
+//            sumWhite += (20 - nextBlackMoves().size());
+//        }
+//        if(!isMaxPlayer){
+//            sumBlack -= (20 - nextWhiteMoves().size());
+//        }
 
         int res = sumWhite - sumBlack;
         return isMaxPlayer ? res : -res;

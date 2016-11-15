@@ -63,9 +63,8 @@ public class Main {
                         break;
                     }
                     String bestMove = ai.pickBestMove(true);
-                    ai.update(bestMove);
-                    // for(String s : whiteMoves) System.out.println(s);
                     System.out.println(bestMove);
+                    ai.update(bestMove);
                 }
                 else{
                     List<String> blackMoves = ai.nextBlackMoves();
@@ -74,8 +73,8 @@ public class Main {
                         break;
                     }
                     String bestMove = ai.pickBestMove(false);
-                    ai.update(bestMove);
                     System.out.println(bestMove);
+                    ai.update(bestMove);
                 }
                 
 
