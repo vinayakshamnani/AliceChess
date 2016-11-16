@@ -720,7 +720,8 @@ public class BaseAliceAIImpl implements AliceAI {
     }
 
     private String miniMax(int depth, boolean isMaxPlayer){
-        String bestMove = "";
+        String player = isMaxPlayer? "white" : "black";
+        String bestMove = player + " surrenders";
         int highValue = Integer.MIN_VALUE;
         int lowValue = Integer.MAX_VALUE;
         int currentValue;
@@ -740,7 +741,7 @@ public class BaseAliceAIImpl implements AliceAI {
             board.setBoard(boardTag, row, col, ' ');
             board.setBoard((boardTag * 2) % 3, row, col, ch);
 
-            currentValue = isMaxPlayer ? min(depth - 1) : max(depth - 1);
+            currentValue = isMaxPlayer ? max(depth - 1) : min(depth - 1);
             if(isMaxPlayer && currentValue > highValue){
                 highValue = currentValue;
                 bestMove = s;
@@ -761,7 +762,7 @@ public class BaseAliceAIImpl implements AliceAI {
 
     private int max(int depth) {
         if (depth == 0) {
-            return evaluate(true);
+            return evaluate();
         }
 
         int bestValue = Integer.MIN_VALUE;
@@ -793,7 +794,7 @@ public class BaseAliceAIImpl implements AliceAI {
 
     private int min(int depth) {
         if (depth == 0) {
-            return evaluate(false);
+            return evaluate();
         }
 
         int bestValue = Integer.MAX_VALUE;
@@ -828,7 +829,7 @@ public class BaseAliceAIImpl implements AliceAI {
      * the pieces, check, move ability, and ...
      *
      */
-    private int evaluate(boolean isMaxPlayer){
+    private int evaluate(){
         // scores of white and black
         int sumWhite = 0;
         int sumBlack = 0;
@@ -893,8 +894,8 @@ public class BaseAliceAIImpl implements AliceAI {
         }
 
         // add points for check
-        if(!isKingSafe("white")) sumBlack -= 20;
-        if(!isKingSafe("black")) sumWhite += 20;
+        if(!isKingSafe("white")) sumBlack += 2;
+        if(!isKingSafe("black")) sumWhite += 2;
 
         // add points for move ability
 //        if(isMaxPlayer){
@@ -904,7 +905,6 @@ public class BaseAliceAIImpl implements AliceAI {
 //            sumBlack -= (20 - nextWhiteMoves().size());
 //        }
 
-        int res = sumWhite - sumBlack;
-        return isMaxPlayer ? res : -res;
+        return sumWhite - sumBlack;
     }
 }

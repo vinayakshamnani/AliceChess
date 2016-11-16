@@ -14,8 +14,8 @@ public class Main {
 		Scanner sc = new Scanner(System.in);
         boolean isStarted = true;
         AliceAI ai = AliceAIFactory.GetInstance().getAIComponent();
-        int moveCount = 0;
-        Random rand = new Random();
+//        int moveCount = 0;
+//        Random rand = new Random();
 
 
         String readColor = sc.nextLine();
@@ -31,7 +31,7 @@ public class Main {
         while(isStarted){
             String read = sc.nextLine();
             if(read.substring(6, 11).equals("moves")) {
-            	moveCount++;
+//            	moveCount++;
                 // TODO: what should we do if we find the referee passed an illegal move?
                 // check if the move is legal, if it is, update the board
                 if(player.equals("white")){
@@ -50,11 +50,11 @@ public class Main {
                 }
             	ai.update(read);
 
-                // TODO : remove the counter once we have a better AI
-                if(moveCount >= 102) {
-                    System.out.println(player + " surrenders");
-                    break;
-                }
+//                // TODO : remove the counter once we have a better AI
+//                if(moveCount >= 102) {
+//                    System.out.println(player + " surrenders");
+//                    break;
+//                }
 
                 if(player.equals("white")){
                     List<String> whiteMoves = ai.nextWhiteMoves();
