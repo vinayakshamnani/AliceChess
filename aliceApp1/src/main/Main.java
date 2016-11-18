@@ -9,6 +9,15 @@ import ai.AliceAIFactory;
 import java.util.Random;
 
 public class Main {
+	
+	private static boolean ContainsInListIgnoringCase(List<String> list, String move) {
+		for(int i = 0; i < list.size(); ++i) {
+			if(move.toLowerCase().equals(list.get(i).toLowerCase()))
+				return true;
+		}
+		
+		return false;
+	}
 
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
@@ -36,7 +45,7 @@ public class Main {
                 // check if the move is legal, if it is, update the board
                 if(player.equals("white")){
                     List<String> legalMoves = ai.nextBlackMoves();
-                    if(!legalMoves.contains(read)){
+                    if(!ContainsInListIgnoringCase(legalMoves, read)){
                         System.out.println("Illegal move!");
                         break;
                     }
