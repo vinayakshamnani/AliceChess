@@ -10,22 +10,19 @@ import java.util.Random;
 
 public class Main {
 	
-	private static boolean ContainsInListIgnoringCase(List<String> list, String move) {
-		for(int i = 0; i < list.size(); ++i) {
-			if(move.toLowerCase().equals(list.get(i).toLowerCase()))
-				return true;
-		}
-		
-		return false;
-	}
+//	private static boolean ContainsInListIgnoringCase(List<String> list, String move) {
+//		for(int i = 0; i < list.size(); ++i) {
+//			if(move.toLowerCase().equals(list.get(i).toLowerCase()))
+//				return true;
+//		}
+//
+//		return false;
+//	}
 
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
         boolean isStarted = true;
         AliceAI ai = AliceAIFactory.GetInstance().getAIComponent();
-//        int moveCount = 0;
-//        Random rand = new Random();
-
 
         String readColor = sc.nextLine();
         String player = readColor.equals("you are white") ? "white" : "black";
@@ -40,12 +37,11 @@ public class Main {
         while(isStarted){
             String read = sc.nextLine();
             if(read.substring(6, 11).equals("moves")) {
-//            	moveCount++;
                 // TODO: what should we do if we find the referee passed an illegal move?
                 // check if the move is legal, if it is, update the board
                 if(player.equals("white")){
                     List<String> legalMoves = ai.nextBlackMoves();
-                    if(!ContainsInListIgnoringCase(legalMoves, read)){
+                    if(!legalMoves.contains(read)){
                         System.out.println("Illegal move!");
                         break;
                     }
@@ -58,12 +54,6 @@ public class Main {
                     }
                 }
             	ai.update(read);
-
-//                // TODO : remove the counter once we have a better AI
-//                if(moveCount >= 102) {
-//                    System.out.println(player + " surrenders");
-//                    break;
-//                }
 
                 if(player.equals("white")){
                     List<String> whiteMoves = ai.nextWhiteMoves();
@@ -85,8 +75,6 @@ public class Main {
                     System.out.println(bestMove);
                     ai.update(bestMove);
                 }
-                
-
             }
             else if(read.substring(6, 11).equals("offers")){
                 System.out.println(player + " accepts draw");

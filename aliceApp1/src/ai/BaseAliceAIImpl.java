@@ -136,7 +136,7 @@ public class BaseAliceAIImpl implements AliceAI {
                 board.setBoard(boardTag, r, c, ' ');
                 board.setBoard((boardTag * 2) % 3, r + 2 * dir, c, ch);
                 if(isKingSafe(player)) {
-                    moves.add(player + " moves " + ch + " from " + boardTag + " " + board.getCol()[c] +
+                    moves.add(player + " moves P from " + boardTag + " " + board.getCol()[c] +
                             board.getRow()[r] + " to " + board.getCol()[c] + board.getRow()[r + 2 * dir]);
                 }
                 //undo update
@@ -153,7 +153,7 @@ public class BaseAliceAIImpl implements AliceAI {
             board.setBoard(boardTag, r, c, ' ');
             board.setBoard((boardTag * 2) % 3, r + dir, c, ch);
             if(isKingSafe(player)) {
-                moves.add(player + " moves " + ch + " from " + boardTag + " " + board.getCol()[c] +
+                moves.add(player + " moves P from " + boardTag + " " + board.getCol()[c] +
                         board.getRow()[r] + " to " + board.getCol()[c] + board.getRow()[r + dir]);
             }
             //undo update
@@ -172,7 +172,7 @@ public class BaseAliceAIImpl implements AliceAI {
                     board.setBoard(boardTag, r + dir, c + i, ' ');
                     board.setBoard((boardTag * 2) % 3, r + dir, c + i, ch);
                     if (isKingSafe(player)) {
-                        moves.add(player + " moves " + ch + " from " + boardTag + " " + board.getCol()[c] +
+                        moves.add(player + " moves P from " + boardTag + " " + board.getCol()[c] +
                                 board.getRow()[r] + " to " + board.getCol()[c + i] + board.getRow()[r + dir]);
                     }
                     //undo update
@@ -217,7 +217,7 @@ public class BaseAliceAIImpl implements AliceAI {
                         board.setBoard(boardTag, list.get(0), list.get(1), ' ');
                         board.setBoard((boardTag * 2) % 3, list.get(0), list.get(1), ch);
                         if(isKingSafe(player)) {
-                            moves.add(player + " moves " + ch + " from " + boardTag + " " +
+                            moves.add(player + " moves N from " + boardTag + " " +
                                     board.getCol()[c] + board.getRow()[r] + " to " +
                                     board.getCol()[list.get(1)] + board.getRow()[list.get(0)]);
                         }
@@ -254,7 +254,7 @@ public class BaseAliceAIImpl implements AliceAI {
                                 board.setBoard(boardTag, r, c, ' ');
                                 board.setBoard((boardTag * 2) % 3, r + i * steps, c + j * steps, ch);
                                 if(isKingSafe(player)) {
-                                    moves.add(player + " moves " + ch + " from " + boardTag + " " +
+                                    moves.add(player + " moves R from " + boardTag + " " +
                                             board.getCol()[c] + board.getRow()[r] + " to " +
                                             board.getCol()[c + j * steps] + board.getRow()[r + i * steps]);
                                 }
@@ -275,7 +275,7 @@ public class BaseAliceAIImpl implements AliceAI {
                                 board.setBoard(boardTag, r + i * steps, c + j * steps, ' '); // previous enemy pos
                                 board.setBoard((boardTag * 2) % 3, r + i * steps, c + j * steps, ch); // new rook pos
                                 if(isKingSafe(player)) {
-                                    moves.add(player + " moves " + ch + " from " + boardTag + " " +
+                                    moves.add(player + " moves R from " + boardTag + " " +
                                             board.getCol()[c] + board.getRow()[r] + " to " +
                                             board.getCol()[c + j * steps] + board.getRow()[r + i * steps]);
                                 }
@@ -315,7 +315,7 @@ public class BaseAliceAIImpl implements AliceAI {
                             board.setBoard(boardTag, r, c, ' ');
                             board.setBoard((boardTag * 2) % 3, r + i * steps, c + j * steps, ch);
                             if(isKingSafe(player)) {
-                                moves.add(player + " moves " + ch + " from " + boardTag + " " +
+                                moves.add(player + " moves B from " + boardTag + " " +
                                         board.getCol()[c] + board.getRow()[r] + " to " +
                                         board.getCol()[c + j * steps] + board.getRow()[r + i * steps]);
                             }
@@ -337,7 +337,7 @@ public class BaseAliceAIImpl implements AliceAI {
                             board.setBoard(boardTag, r + i * steps, c + j * steps, ' ');
                             board.setBoard((boardTag * 2) % 3, r + i * steps, c + j * steps, ch);
                             if(isKingSafe(player)) {
-                                moves.add(player + " moves " + ch + " from " + boardTag + " " +
+                                moves.add(player + " moves B from " + boardTag + " " +
                                         board.getCol()[c] + board.getRow()[r] + " to " +
                                         board.getCol()[c + j * steps] + board.getRow()[r + i * steps]);
                             }
@@ -376,7 +376,7 @@ public class BaseAliceAIImpl implements AliceAI {
                                 board.setBoard(boardTag, r, c, ' ');
                                 board.setBoard((boardTag * 2) % 3, r + i * steps, c + j * steps, ch);
                                 if (isKingSafe(player)) {
-                                    moves.add(player + " moves " + ch + " from " + boardTag + " " +
+                                    moves.add(player + " moves Q from " + boardTag + " " +
                                             board.getCol()[c] + board.getRow()[r] + " to " +
                                             board.getCol()[c + j * steps] + board.getRow()[r + i * steps]);
                                 }
@@ -398,7 +398,7 @@ public class BaseAliceAIImpl implements AliceAI {
                                 board.setBoard(boardTag, r + i * steps, c + j * steps, ' ');
                                 board.setBoard((boardTag * 2) % 3, r + i * steps, c + j * steps, ch);
                                 if (isKingSafe(player)) {
-                                    moves.add(player + " moves " + ch + " from " + boardTag + " " +
+                                    moves.add(player + " moves Q from " + boardTag + " " +
                                             board.getCol()[c] + board.getRow()[r] + " to " +
                                             board.getCol()[c + j * steps] + board.getRow()[r + i * steps]);
                                 }
@@ -446,7 +446,7 @@ public class BaseAliceAIImpl implements AliceAI {
                                 board.setBoard(boardTag, r1, c1, ' ');
                                 board.setBoard((boardTag * 2) % 3, r1, c1, ch);
                                 if(isKingSafe(player)){
-                                    moves.add(player + " moves " + ch + " from " + boardTag + " " +
+                                    moves.add(player + " moves K from " + boardTag + " " +
                                             board.getCol()[c] + board.getRow()[r] + " to " +
                                             board.getCol()[c1] + board.getRow()[r1]);
                                 }
@@ -676,6 +676,8 @@ public class BaseAliceAIImpl implements AliceAI {
     	//  it has moved from and to.
         int boardTag = s.charAt(19) - '0';
         char ch = s.charAt(12);
+        String color = s.substring(0, 5);
+        if(color.equals("black")) ch = Character.toLowerCase(ch);
         int preCol = s.charAt(21) - 'a';
         int preRow = 8 - (s.charAt(22) - '0');
         int col = s.charAt(27) - 'a';
@@ -686,7 +688,7 @@ public class BaseAliceAIImpl implements AliceAI {
         board.setBoard(boardTag, row, col, ' ');
         board.setBoard((boardTag * 2) % 3, row, col, ch);
 
-        // printBoard();
+        printBoard();
     }
 
     private void printBoard() {
@@ -731,6 +733,8 @@ public class BaseAliceAIImpl implements AliceAI {
         for(String s : nextMoves){
             int boardTag = s.charAt(19) - '0';
             char ch = s.charAt(12);
+            String color = s.substring(0, 5);
+            if(color.equals("black")) ch = Character.toLowerCase(ch);
             int preCol = s.charAt(21) - 'a';
             int preRow = 8 - (s.charAt(22) - '0');
             int col = s.charAt(27) - 'a';
@@ -771,6 +775,8 @@ public class BaseAliceAIImpl implements AliceAI {
         for (String s : nextWhiteMoves) {
             int boardTag = s.charAt(19) - '0';
             char ch = s.charAt(12);
+            String color = s.substring(0, 5);
+            if(color.equals("black")) ch = Character.toLowerCase(ch);
             int preCol = s.charAt(21) - 'a';
             int preRow = 8 - (s.charAt(22) - '0');
             int col = s.charAt(27) - 'a';
@@ -803,6 +809,8 @@ public class BaseAliceAIImpl implements AliceAI {
         for(String s : nextBlackMoves){
             int boardTag = s.charAt(19) - '0';
             char ch = s.charAt(12);
+            String color = s.substring(0, 5);
+            if(color.equals("black")) ch = Character.toLowerCase(ch);
             int preCol = s.charAt(21) - 'a';
             int preRow = 8 - (s.charAt(22) - '0');
             int col = s.charAt(27) - 'a';
