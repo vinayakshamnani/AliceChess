@@ -6,10 +6,14 @@ import java.util.Scanner;
 
 import ai.AliceAI;
 import ai.AliceAIFactory;
+
 import java.util.Random;
+
+import util.MoveFilter;
 
 public class Main {
 	
+<<<<<<< HEAD
 //	private static boolean ContainsInListIgnoringCase(List<String> list, String move) {
 //		for(int i = 0; i < list.size(); ++i) {
 //			if(move.toLowerCase().equals(list.get(i).toLowerCase()))
@@ -19,6 +23,8 @@ public class Main {
 //		return false;
 //	}
 
+=======
+>>>>>>> origin/master
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
         boolean isStarted = true;
@@ -41,7 +47,11 @@ public class Main {
                 // check if the move is legal, if it is, update the board
                 if(player.equals("white")){
                     List<String> legalMoves = ai.nextBlackMoves();
+<<<<<<< HEAD
                     if(!legalMoves.contains(read)){
+=======
+                    if(!MoveFilter.ContainsInListIgnoringCase(legalMoves, read)){
+>>>>>>> origin/master
                         System.out.println("Illegal move!");
                         break;
                     }
