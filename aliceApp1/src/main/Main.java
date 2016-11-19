@@ -13,7 +13,7 @@ import util.MoveFilter;
 
 public class Main {
 	
-<<<<<<< HEAD
+//<<<<<<< HEAD
 //	private static boolean ContainsInListIgnoringCase(List<String> list, String move) {
 //		for(int i = 0; i < list.size(); ++i) {
 //			if(move.toLowerCase().equals(list.get(i).toLowerCase()))
@@ -23,8 +23,8 @@ public class Main {
 //		return false;
 //	}
 
-=======
->>>>>>> origin/master
+//=======
+//>>>>>>> origin/master
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
         boolean isStarted = true;
@@ -43,26 +43,26 @@ public class Main {
         while(isStarted){
             String read = sc.nextLine();
             if(read.substring(6, 11).equals("moves")) {
-                // TODO: what should we do if we find the referee passed an illegal move?
-                // check if the move is legal, if it is, update the board
-                if(player.equals("white")){
-                    List<String> legalMoves = ai.nextBlackMoves();
-<<<<<<< HEAD
-                    if(!legalMoves.contains(read)){
-=======
-                    if(!MoveFilter.ContainsInListIgnoringCase(legalMoves, read)){
->>>>>>> origin/master
-                        System.out.println("Illegal move!");
-                        break;
-                    }
-                }
-                else{
-                    List<String> legalMoves = ai.nextWhiteMoves();
-                    if(!legalMoves.contains(read)){
-                        System.out.println("Illegal move!");
-                        break;
-                    }
-                }
+//                // TODO: what should we do if we find the referee passed an illegal move?
+//                // check if the move is legal, if it is, update the board
+//                if(player.equals("white")){
+//                    List<String> legalMoves = ai.nextBlackMoves();
+////<<<<<<< HEAD
+//                    if(!legalMoves.contains(read)){
+////=======
+//
+////>>>>>>> origin/master
+//                        System.out.println("Illegal move!");
+//                        break;
+//                    }
+//                }
+//                else{
+//                    List<String> legalMoves = ai.nextWhiteMoves();
+//                    if(!legalMoves.contains(read)){
+//                        System.out.println("Illegal move!");
+//                        break;
+//                    }
+//                }
             	ai.update(read);
 
                 if(player.equals("white")){

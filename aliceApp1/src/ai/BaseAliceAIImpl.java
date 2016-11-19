@@ -688,7 +688,7 @@ public class BaseAliceAIImpl implements AliceAI {
         board.setBoard(boardTag, row, col, ' ');
         board.setBoard((boardTag * 2) % 3, row, col, ch);
 
-        printBoard();
+//        printBoard();
     }
 
     private void printBoard() {
