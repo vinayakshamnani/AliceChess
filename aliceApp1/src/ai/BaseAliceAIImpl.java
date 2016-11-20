@@ -688,7 +688,7 @@ public class BaseAliceAIImpl implements AliceAI {
         board.setBoard(boardTag, row, col, ' ');
         board.setBoard((boardTag * 2) % 3, row, col, ch);
 
-//        printBoard();
+        printBoard();
     }
 
     private void printBoard() {
@@ -845,27 +845,27 @@ public class BaseAliceAIImpl implements AliceAI {
         // add the weight of active pieces to score
         for(int i = 0; i < 64; i++){
             switch (board.getBoardA()[i / 8][i % 8]){
-                case 'P' : sumWhite += 1;
+                case 'P' : sumWhite += 10;
                     break;
-                case 'R' : sumWhite += 5;
+                case 'R' : sumWhite += 82;
                     break;
-                case 'N' : sumWhite += 3;
+                case 'N' : sumWhite += 32;
                     break;
-                case 'B' : sumWhite += 4;
+                case 'B' : sumWhite += 54;
                     break;
-                case 'Q' : sumWhite += 10;
+                case 'Q' : sumWhite += 132;
                     break;
                 case 'K' : sumWhite += 0;
                     break;
                 case 'p' : sumBlack += 1;
                     break;
-                case 'r' : sumBlack += 5;
+                case 'r' : sumBlack += 82;
                     break;
-                case 'n' : sumBlack += 3;
+                case 'n' : sumBlack += 32;
                     break;
-                case 'b' : sumBlack += 4;
+                case 'b' : sumBlack += 54;
                     break;
-                case 'q' : sumBlack += 10;
+                case 'q' : sumBlack += 132;
                     break;
                 case 'k' : sumBlack += 0;
                     break;
@@ -874,27 +874,27 @@ public class BaseAliceAIImpl implements AliceAI {
 
         for(int i = 0; i < 64; i++){
             switch (board.getBoardB()[i / 8][i % 8]){
-                case 'P' : sumWhite += 1;
+                case 'P' : sumWhite += 10;
                     break;
-                case 'R' : sumWhite += 5;
+                case 'R' : sumWhite += 82;
                     break;
-                case 'N' : sumWhite += 3;
+                case 'N' : sumWhite += 32;
                     break;
-                case 'B' : sumWhite += 4;
+                case 'B' : sumWhite += 54;
                     break;
-                case 'Q' : sumWhite += 10;
+                case 'Q' : sumWhite += 132;
                     break;
                 case 'K' : sumWhite += 0;
                     break;
                 case 'p' : sumBlack += 1;
                     break;
-                case 'r' : sumBlack += 5;
+                case 'r' : sumBlack += 82;
                     break;
-                case 'n' : sumBlack += 3;
+                case 'n' : sumBlack += 32;
                     break;
-                case 'b' : sumBlack += 4;
+                case 'b' : sumBlack += 54;
                     break;
-                case 'q' : sumBlack += 10;
+                case 'q' : sumBlack += 132;
                     break;
                 case 'k' : sumBlack += 0;
                     break;
@@ -902,8 +902,8 @@ public class BaseAliceAIImpl implements AliceAI {
         }
 
         // add points for check
-        if(!isKingSafe("white")) sumBlack += 2;
-        if(!isKingSafe("black")) sumWhite += 2;
+        if(!isKingSafe("white")) sumBlack += 1;
+        if(!isKingSafe("black")) sumWhite += 1;
 
         // add points for move ability
 //        if(isMaxPlayer){

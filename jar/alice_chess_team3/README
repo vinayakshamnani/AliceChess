@@ -1,0 +1,39 @@
+This is a prototype of the alice chess program made by our team. 
+This is v0.2.4 where the game is expected to do the following:
+1. Reads the referee's first message from standard input.
+2. Respond instantly if the program is white, else skips a turn.
+3. Reads a message from standard input and prints it's message to the standard output.
+4. Continues making valid moves until it receives a <win>, <lose> or a <draw> message.
+5. Every move made is stateful in the sense, the game knows the current state of the game.
+6. After a termination message, the program exits with a status 0.
+
+This rapid prototype does not incorporate any smart strategy.
+It only picks the first move from the list of valid moves until the program wins, loses or there is a draw.
+It does however maintains a state of the game so it knows which moves are valid and which aren't.
+
+Team Members:
+1. Vinayak  shamnani.v@husky.neu.edu
+2. Chang    zhou.chan@husky.neu.edu
+3. Ajay     kauthale.a@husky.neu.edu
+4. Krishna  jayanthi.v@husky.neu.edu
+
+The folder src contains the source code (Java files) required for this application.
+the jar alice_v0.2.4.jar contains the final build for this prototype.
+The script alice5500 is a simple script that invokes the java command to run the application.
+
+Instructiosn to run the application:
+1. Extract the .tar.gz file into the required folder using the command:
+    tar -zxvf alice_chess_team3.tar.gz
+2. Verify that the extracted file contains the following files:
+   i)   README              - This file
+   ii)  alice_v0.2.4.jar    - The jar containing the executable program
+   iii) alice5500           - The script that runs the program
+   iv)  src                 - Folder containing the source code for the application
+2. Run the script ./alice5500 without any command line parameters.
+
+
+
+Thank You.
+
+
+

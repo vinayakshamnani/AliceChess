@@ -35,34 +35,34 @@ public class Main {
 
         //white first move
         if(player.equals("white")) {
-            List<String> whiteFirstMoves = ai.nextWhiteMoves();
-            ai.update(whiteFirstMoves.get(4));
-            System.out.println(whiteFirstMoves.get(4));
+            String bestMove = ai.pickBestMove(true);
+            System.out.println(bestMove);
+            ai.update(bestMove);
         }
 
         while(isStarted){
             String read = sc.nextLine();
             if(read.substring(6, 11).equals("moves")) {
-//                // TODO: what should we do if we find the referee passed an illegal move?
-//                // check if the move is legal, if it is, update the board
-//                if(player.equals("white")){
-//                    List<String> legalMoves = ai.nextBlackMoves();
-////<<<<<<< HEAD
-//                    if(!legalMoves.contains(read)){
-////=======
-//
-////>>>>>>> origin/master
-//                        System.out.println("Illegal move!");
-//                        break;
-//                    }
-//                }
-//                else{
-//                    List<String> legalMoves = ai.nextWhiteMoves();
-//                    if(!legalMoves.contains(read)){
-//                        System.out.println("Illegal move!");
-//                        break;
-//                    }
-//                }
+                // TODO: what should we do if we find the referee passed an illegal move?
+                // check if the move is legal, if it is, update the board
+                if(player.equals("white")){
+                    List<String> legalMoves = ai.nextBlackMoves();
+//<<<<<<< HEAD
+                    if(!legalMoves.contains(read)){
+//=======
+
+//>>>>>>> origin/master
+                        System.out.println("Illegal move!");
+                        break;
+                    }
+                }
+                else{
+                    List<String> legalMoves = ai.nextWhiteMoves();
+                    if(!legalMoves.contains(read)){
+                        System.out.println("Illegal move!");
+                        break;
+                    }
+                }
             	ai.update(read);
 
                 if(player.equals("white")){
