@@ -2,17 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e9169f7d-524b-4d5d-ae9e-1f3fcbf76ce2" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/artifacts/aliceApp1_jar.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/aliceApp1/src/META-INF/MANIFEST.MF" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/aliceApp1/jr.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/aliceApp1/new.jar" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jar/alice_v0.2.4.jar" afterPath="$PROJECT_DIR$/jar/alice_v0.2.4.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/aliceApp1/ai/BaseAliceAIImpl.class" afterPath="$PROJECT_DIR$/out/production/aliceApp1/ai/BaseAliceAIImpl.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/aliceApp1/main/Main.class" afterPath="$PROJECT_DIR$/out/production/aliceApp1/main/Main.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/aliceApp1/aliceApp1.jar" afterPath="$PROJECT_DIR$/aliceApp1/aliceApp1.jar" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/aliceApp1/src/ai/BaseAliceAIImpl.java" afterPath="$PROJECT_DIR$/aliceApp1/src/ai/BaseAliceAIImpl.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/aliceApp1/src/main/Main.java" afterPath="$PROJECT_DIR$/aliceApp1/src/main/Main.java" />
     </list>
     <ignored path="AliceChess.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -36,8 +27,8 @@
       <file leaf-file-name="BaseAliceAIImpl.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/aliceApp1/src/ai/BaseAliceAIImpl.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2936">
-              <caret line="721" column="5" selection-start-line="721" selection-start-column="5" selection-end-line="721" selection-end-column="5" />
+            <state relative-caret-position="13260">
+              <caret line="516" column="33" selection-start-line="516" selection-start-column="33" selection-end-line="516" selection-end-column="33" />
               <folding />
             </state>
           </provider>
@@ -46,7 +37,7 @@
       <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/aliceApp1/src/main/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-378">
+            <state relative-caret-position="1170">
               <caret line="54" column="40" selection-start-line="54" selection-start-column="40" selection-end-line="54" selection-end-column="40" />
               <folding />
             </state>
@@ -104,9 +95,9 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="Scratches" />
       <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -883,7 +874,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/aliceApp1/src/main/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-378">
+        <state relative-caret-position="1170">
           <caret line="54" column="40" selection-start-line="54" selection-start-column="40" selection-end-line="54" selection-end-column="40" />
           <folding />
         </state>
@@ -891,8 +882,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/aliceApp1/src/ai/BaseAliceAIImpl.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2936">
-          <caret line="721" column="5" selection-start-line="721" selection-start-column="5" selection-end-line="721" selection-end-column="5" />
+        <state relative-caret-position="13260">
+          <caret line="516" column="33" selection-start-line="516" selection-start-column="33" selection-end-line="516" selection-end-column="33" />
           <folding />
         </state>
       </provider>

@@ -131,7 +131,9 @@ public class BaseAliceAIImpl implements AliceAI {
         //pawn can move 2 steps if it is at the initial position
         if(boardTag == 1 && board.getRow()[r] == ini_pos){
             //move by 2 steps
-            if(board.getFromBoard(boardTag, r + 2 * dir, c) == ' ' && board.getBoardB()[r + 2 * dir][c] == ' '){
+            if(board.getFromBoard(boardTag, r + dir, c) == ' '
+                    && board.getFromBoard(boardTag, r + 2 * dir, c) == ' '
+                    && board.getBoardB()[r + 2 * dir][c] == ' '){
                 // temporarily update the board to check if the king is still safe after the move
                 board.setBoard(boardTag, r, c, ' ');
                 board.setBoard((boardTag * 2) % 3, r + 2 * dir, c, ch);
@@ -145,7 +147,6 @@ public class BaseAliceAIImpl implements AliceAI {
             }
         }
 
-        // TODO: promotion not considered yet
         //move forward by 1 step
         if(board.getFromBoard(boardTag, r + dir, c) == ' ' &&
                 board.getFromBoard((boardTag * 2) % 3, r + dir, c) == ' '){
@@ -495,8 +496,13 @@ public class BaseAliceAIImpl implements AliceAI {
         // check if king is under attack by an enemy pawn
         if(player.equals("white")){
             try {
-                if (board.getFromBoard(boardTag_K, r_K - 1, c_K - 1) == 'p' ||
-                        board.getFromBoard(boardTag_K, r_K - 1, c_K + 1) == 'p') {
+                if (board.getFromBoard(boardTag_K, r_K - 1, c_K - 1) == 'p') {
+                    return false;
+                }
+            }
+            catch (Exception e){}
+            try {
+                if (board.getFromBoard(boardTag_K, r_K - 1, c_K + 1) == 'p') {
                     return false;
                 }
             }
@@ -504,8 +510,13 @@ public class BaseAliceAIImpl implements AliceAI {
         }
         else{
             try {
-                if (board.getFromBoard(boardTag_k, r_k + 1, c_k - 1) == 'P' ||
-                        board.getFromBoard(boardTag_k, r_k + 1, c_k + 1) == 'P') {
+                if (board.getFromBoard(boardTag_k, r_k + 1, c_k - 1) == 'P') {
+                    return false;
+                }
+            }
+            catch (Exception e){}
+            try {
+                if (board.getFromBoard(boardTag_k, r_k + 1, c_k + 1) == 'P') {
                     return false;
                 }
             }
@@ -673,7 +684,7 @@ public class BaseAliceAIImpl implements AliceAI {
      */
     public void update(String s) {
     	// From the input message, find out which board it is, the piece, the row and column
-    	//  it has moved from and to.
+    	// it has moved from and to.
         int boardTag = s.charAt(19) - '0';
         char ch = s.charAt(12);
         String color = s.substring(0, 5);
@@ -682,6 +693,10 @@ public class BaseAliceAIImpl implements AliceAI {
         int preRow = 8 - (s.charAt(22) - '0');
         int col = s.charAt(27) - 'a';
         int row = 8 - (s.charAt(28) - '0');
+
+        // when a pawn reach the last row, it will be automatically promoted to a queen.
+        if(ch == 'P' && row == 0) ch = 'Q';
+        if(ch == 'p' && row == 7) ch = 'q';
 
         // Just update the board.
         board.setBoard(boardTag, preRow, preCol, ' ');
