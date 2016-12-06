@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import util.MoveFilter;
+
 /**
  * Our first iteration of the AliceAI api.
  * It's better than just dumbly giving up or picking a random move that can be invalid.
@@ -18,6 +20,8 @@ import java.util.List;
  *
  */
 public class BaseAliceAIImpl implements AliceAI {
+	final static int DEPTH = 3;
+	final static int filterThreshold = 39;
 	/**
 	 * The actual Board to hold the current state of the game.
 	 */
@@ -148,6 +152,7 @@ public class BaseAliceAIImpl implements AliceAI {
         }
 
         //move forward by 1 step
+        try{
         if(board.getFromBoard(boardTag, r + dir, c) == ' ' &&
                 board.getFromBoard((boardTag * 2) % 3, r + dir, c) == ' '){
             // temporarily update the board to check if the king is still safe after the move
@@ -161,6 +166,10 @@ public class BaseAliceAIImpl implements AliceAI {
             board.setBoard(boardTag, r, c, ch);
             board.setBoard((boardTag * 2) % 3, r + dir, c, ' ');
         }
+        }catch (Exception e){
+        	e.printStackTrace();
+        	System.out.println("row:"+ r+dir + " col:"+ c);
+        } 
         //catch enemy piece
         try{
             for(int i = -1; i <= 1; i+=2) {
@@ -703,7 +712,7 @@ public class BaseAliceAIImpl implements AliceAI {
         board.setBoard(boardTag, row, col, ' ');
         board.setBoard((boardTag * 2) % 3, row, col, ch);
 
-        printBoard();
+       // printBoard();
     }
 
     private void printBoard() {
@@ -732,7 +741,7 @@ public class BaseAliceAIImpl implements AliceAI {
      *
      */
     public String pickBestMove(boolean isMaxPlayer) {
-        final int DEPTH = 4;
+        
         return miniMax(DEPTH, isMaxPlayer);
     }
 
@@ -743,9 +752,15 @@ public class BaseAliceAIImpl implements AliceAI {
         int lowValue = Integer.MAX_VALUE;
         int currentValue;
 
-        List<String> nextMoves = isMaxPlayer ? nextWhiteMoves() : nextBlackMoves();
+        List<String> nonSortedMoves = isMaxPlayer ? nextWhiteMoves() : nextBlackMoves();
+        List<String> nextMoves = MoveFilter.SortMovesByPiece(nonSortedMoves, player);
+        int counter = 0;
 
         for(String s : nextMoves){
+        	
+        	if(counter == filterThreshold)
+        		break;
+        	
             int boardTag = s.charAt(19) - '0';
             char ch = s.charAt(12);
             String color = s.substring(0, 5);
@@ -774,6 +789,8 @@ public class BaseAliceAIImpl implements AliceAI {
             board.setBoard(boardTag, preRow, preCol, ch);
             board.setBoard(boardTag, row, col, preChar);
             board.setBoard((boardTag * 2) % 3, row, col, ' ');
+            
+            counter++;
 
         }
         return bestMove;
@@ -872,7 +889,7 @@ public class BaseAliceAIImpl implements AliceAI {
                     break;
                 case 'K' : sumWhite += 0;
                     break;
-                case 'p' : sumBlack += 1;
+                case 'p' : sumBlack += 10;
                     break;
                 case 'r' : sumBlack += 82;
                     break;
@@ -901,7 +918,7 @@ public class BaseAliceAIImpl implements AliceAI {
                     break;
                 case 'K' : sumWhite += 0;
                     break;
-                case 'p' : sumBlack += 1;
+                case 'p' : sumBlack += 10;
                     break;
                 case 'r' : sumBlack += 82;
                     break;

@@ -1,5 +1,6 @@
 package util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MoveFilter {
@@ -11,5 +12,19 @@ public class MoveFilter {
 		}
 		
 		return false;
+	}
+	
+	public static List<String> SortMovesByPiece(List<String> moves, String player)
+	{
+		List<String> ret = new ArrayList<String>();
+		
+		for(String s : moves) {
+			if(s.startsWith(player + " moves P"))
+				ret.add(s);
+			else
+				ret.add(0, s);
+		}
+		
+		return ret;
 	}
 }
