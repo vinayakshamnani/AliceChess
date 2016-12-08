@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import util.Constants;
 import util.MoveFilter;
 
 /**
@@ -20,12 +21,30 @@ import util.MoveFilter;
  *
  */
 public class BaseAliceAIImpl implements AliceAI {
+	
 	final static int DEPTH = 3;
 	final static int filterThreshold = 39;
+	
+	private List<IChessPiece> chessPieces;
+	
+	public BaseAliceAIImpl()
+	{
+		chessPieces = new ArrayList<IChessPiece>();
+	}
+	
+	public void addChessPieceToAI(IChessPiece chessPiece)
+	{
+		chessPieces.add(chessPiece);
+	}
+	
 	/**
 	 * The actual Board to hold the current state of the game.
 	 */
 	private Board board = new Board();
+	
+	public Board getAIBoard() {
+		return board;
+	}
 
 	/**
 	 * This is not doing any thing as of now. Just returns the same input List of moves. 
@@ -34,96 +53,97 @@ public class BaseAliceAIImpl implements AliceAI {
 		return validMoves;
 	}
 	
+	public void nextWhiteMoves(char[][] board, int boardTag, List<String> moves) {
+        for(int i = 0; i < 64; i++){
+        	boolean found = false;
+        	for(IChessPiece p : chessPieces) {
+        		if(p.getPieceName() == board[i / 8][i % 8]) {
+        			p.movePiece(boardTag, i, moves);
+        			found = true;
+        		}
+        	}
+        	
+        	if(!found) {
+        		switch (board[i / 8][i % 8]){
+                case Constants.WHITE_ROOK : nextMoves_R(boardTag, i, moves);
+                    break;
+                case Constants.WHITE_KNIGHT : nextMoves_N(boardTag, i, moves);
+                    break;
+                case Constants.WHITE_BISHOP : nextMoves_B(boardTag, i, moves);
+                    break;
+                case Constants.WHITE_QUEEN : nextMoves_Q(boardTag, i, moves);
+                    break;
+                case Constants.WHITE_KING : nextMoves_K(boardTag, i, moves);
+                    break;
+            }
+        	}
+            
+        }
+	}
+	
+	
 	/**
 	 * Returns the next set of white moves that are legal to make but not smarter.
 	 */
     public List<String> nextWhiteMoves(){
         List<String> moves = new ArrayList<String>();
-
+        
         /* Loop through all positions on the first board and find out if a move can be made by the piece */
-        for(int i = 0; i < 64; i++){
-            switch (board.getBoardA()[i / 8][i % 8]){
-                case 'P' : nextMoves_P(1, i, moves, -1);
-                    break;
-                case 'R' : nextMoves_R(1, i, moves);
-                    break;
-                case 'N' : nextMoves_N(1, i, moves);
-                    break;
-                case 'B' : nextMoves_B(1, i, moves);
-                    break;
-                case 'Q' : nextMoves_Q(1, i, moves);
-                    break;
-                case 'K' : nextMoves_K(1, i, moves);
-                    break;
-            }
-        }
-
-        /* Loop through the second board and find out all possible moves that can be made. */
-        for(int i = 0; i < 64; i++){
-            switch (board.getBoardB()[i / 8][i % 8]){
-                case 'P' : nextMoves_P(2, i, moves, -1);
-                    break;
-                case 'R' : nextMoves_R(2, i, moves);
-                    break;
-                case 'N' : nextMoves_N(2, i, moves);
-                    break;
-                case 'B' : nextMoves_B(2, i, moves);
-                    break;
-                case 'Q' : nextMoves_Q(2, i, moves);
-                    break;
-                case 'K' : nextMoves_K(2, i, moves);
-                    break;
-            }
-        }
+        nextWhiteMoves(board.getBoardA(), board.BOARD_A, moves);
+        
+        /* Loop through all positions on the second board and find out if a move can be made by the piece */
+        nextWhiteMoves(board.getBoardB(), board.BOARD_B, moves);
         
         /* Finally return the List of moves. If this is empty, the calling program should give up. */
         return moves;
+    }
+
+    
+    public void nextBlackMoves(char[][]board, int boardTag, List<String> moves){
+        for(int i = 0; i < 64; i++){
+        	
+        	boolean found = false;
+        	for(IChessPiece p : chessPieces) {
+        		if(p.getPieceName() == board[i / 8][i % 8]) {
+        			p.movePiece(boardTag, i, moves);
+        			found = true;
+        		}
+        	}
+        	
+        	if(!found) {
+        		switch (board[i / 8][i % 8]){
+                case Constants.BLACK_ROOK : nextMoves_R(boardTag, i, moves);
+                    break;
+                case Constants.BLACK_KNIGHT : nextMoves_N(boardTag, i, moves);
+                    break;
+                case Constants.BLACK_BISHOP : nextMoves_B(boardTag, i, moves);
+                    break;
+                case Constants.BLACK_QUEEN : nextMoves_Q(boardTag, i, moves);
+                    break;
+                case Constants.BLACK_KING : nextMoves_K(boardTag, i, moves);
+                    break;
+            }	
+        	}
+            
+        }       
     }
 
     /**
      * Returns the next set of black moves that are legal to make but not smarter.
      */
     public List<String> nextBlackMoves(){
-        List<String> moves = new ArrayList<String>();
-
-        /* Loop through all positions on the first board and find out if a move can be made by the piece */
-        for(int i = 0; i < 64; i++){
-            switch (board.getBoardA()[i / 8][i % 8]){
-                case 'p' : nextMoves_P(1, i, moves, 1);
-                    break;
-                case 'r' : nextMoves_R(1, i, moves);
-                    break;
-                case 'n' : nextMoves_N(1, i, moves);
-                    break;
-                case 'b' : nextMoves_B(1, i, moves);
-                    break;
-                case 'q' : nextMoves_Q(1, i, moves);
-                    break;
-                case 'k' : nextMoves_K(1, i, moves);
-                    break;
-            }
-        }
-
-        /* Loop through the second board and find out all possible moves that can be made. */
-        for(int i = 0; i < 64; i++){
-            switch (board.getBoardB()[i / 8][i % 8]){
-                case 'p' : nextMoves_P(2, i, moves, 1);
-                    break;
-                case 'r' : nextMoves_R(2, i, moves);
-                    break;
-                case 'n' : nextMoves_N(2, i, moves);
-                    break;
-                case 'b' : nextMoves_B(2, i, moves);
-                    break;
-                case 'q' : nextMoves_Q(2, i, moves);
-                    break;
-                case 'k' : nextMoves_K(2, i, moves);
-                    break;
-            }
-        }
-        return moves;
+    	List<String> moves = new ArrayList<String>();
+    	
+    	/* Loop through all positions on the first board and find out if a move can be made by the piece */
+    	nextBlackMoves(board.getBoardA(), board.BOARD_A, moves);
+    	
+    	/* Loop through all positions on the second board and find out if a move can be made by the piece */
+    	nextBlackMoves(board.getBoardB(), board.BOARD_B, moves);
+    	
+    	/* Finally return the List of moves. If this is empty, the calling program should give up. */
+    	return moves;
     }
-
+    
     private void nextMoves_P(int boardTag, int pos, List<String> moves, int direction){
         int r = pos / 8;
         int c = pos % 8;
@@ -712,7 +732,7 @@ public class BaseAliceAIImpl implements AliceAI {
         board.setBoard(boardTag, row, col, ' ');
         board.setBoard((boardTag * 2) % 3, row, col, ch);
 
-       // printBoard();
+        printBoard();
     }
 
     private void printBoard() {

@@ -2,6 +2,8 @@ package ai;
 
 import java.util.List;
 
+import model.Board;
+
 /**
  * The AI interface that dictates the api for the AI that other modules will incorporate.
  * Other modules will only be exposed to this api. An implementation of this would
@@ -52,4 +54,9 @@ public interface AliceAI {
 	 * @return String - a string representing the best next move for the current player.
 	 */
 	String pickBestMove(boolean isMaxPlayer);
+	
+	
+	void addChessPieceToAI(IChessPiece chessPiece);
+	
+	Board getAIBoard();
 }

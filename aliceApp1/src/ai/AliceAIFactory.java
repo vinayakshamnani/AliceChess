@@ -51,7 +51,11 @@ public class AliceAIFactory {
 	public AliceAI getAIComponent() {
 		// As of now, mapped BaseAliceAIImpl to AliceAI api.
 		AliceAI aiComponent = new BaseAliceAIImpl();
+		aiComponent.addChessPieceToAI(new PawnChessPiece(aiComponent.getAIBoard(), 'P'));
+		aiComponent.addChessPieceToAI(new PawnChessPiece(aiComponent.getAIBoard(), 'p'));
 		
 		return aiComponent;
 	}
+	
+	
 }
