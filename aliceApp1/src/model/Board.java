@@ -32,6 +32,8 @@ public class Board {
 
     /**
      * Board A representation
+     * 
+     * Black pieces are represented by upper case and white pieces are represented in lower case
      */
     private char[][] boardA = {
             {'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'},

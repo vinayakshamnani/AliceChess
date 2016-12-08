@@ -7,14 +7,30 @@ import java.util.Scanner;
 import ai.AliceAI;
 import ai.AliceAIFactory;
 
+/**
+ * Main class for running the program
+ * 
+ * @author Ajay
+ *
+ */
 public class Main {
 
+	/**
+	 * main method for running the program
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args) {
+		// scanner instance for reading the inputs from referee 
 		Scanner sc = new Scanner(System.in);
         boolean isStarted = true;
+        
+        // instance of AI for deciding the move
         AliceAI ai = AliceAIFactory.GetInstance().getAIComponent();
 
         String readColor = sc.nextLine();
+        
+        // read the player color
         String player = readColor.equals("you are white") ? "white" : "black";
 
         //white first move
@@ -24,6 +40,7 @@ public class Main {
             ai.update(bestMove);
         }
 
+        // read incoming move and play next move until game closes
         while(isStarted){
             String read = sc.nextLine();
             if(read.substring(6, 11).equals("moves")) {
@@ -44,6 +61,7 @@ public class Main {
                 }
             	ai.update(read);
 
+            	// check if the move made player to surrender, if it is, update the board
                 if(player.equals("white")){
                     List<String> whiteMoves = ai.nextWhiteMoves();
                     if(whiteMoves.size() == 0){
@@ -64,15 +82,22 @@ public class Main {
                     System.out.println(bestMove);
                     ai.update(bestMove);
                 }
-            }
+            } 
             else if(read.substring(6, 11).equals("offers")){
+            	// Accept the draw offered by opponent player
                 System.out.println(player + " accepts draw");
             }
             else if(read.substring(6, 13).equals("declines")){
+            	// If opponent player declines the draw, then surrender
                 System.out.println(player + " surrenders");
             }
-            else isStarted = false;
+            else {
+            	// Stop the game
+            	isStarted = false;
+            }
         }
+        
+        // close the scanner
         sc.close();
 	}
 }
