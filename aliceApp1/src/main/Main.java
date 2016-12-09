@@ -44,21 +44,6 @@ public class Main {
         while(isStarted){
             String read = sc.nextLine();
             if(read.substring(6, 11).equals("moves")) {
-                // check if the move is legal, if it is, update the board
-                if(player.equals(Constants.PLAYER_WHITE)){
-                    List<String> legalMoves = ai.nextBlackMoves();
-                    if(!legalMoves.contains(read)){
-                        //System.out.println("Illegal move!");
-                        break;
-                    }
-                }
-                else{
-                    List<String> legalMoves = ai.nextWhiteMoves();
-                    if(!legalMoves.contains(read)){
-                        //System.out.println("Illegal move!");
-                        break;
-                    }
-                }
             	ai.update(read);
 
             	// check if the move made player to surrender, if it is, update the board
