@@ -1,5 +1,11 @@
 package ai;
 
+import ai.pieces.BishopChessPiece;
+import ai.pieces.KingChessPiece;
+import ai.pieces.KnightChessPiece;
+import ai.pieces.PawnChessPiece;
+import ai.pieces.QueenChessPiece;
+import ai.pieces.RookChessPiece;
 import util.Constants;
 
 /**

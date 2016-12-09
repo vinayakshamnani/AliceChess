@@ -1,12 +1,13 @@
-package ai;
+package ai.pieces;
 
 import java.util.List;
+import util.Constants;
 
 import model.Board;
 
-public class QueenChessPiece extends BaseChessPiece {
+public class RookChessPiece extends BaseChessPiece {
 
-	public QueenChessPiece(Board board, char name) {
+	public RookChessPiece(Board board, char name) {
 		super(board, name);
 		// TODO Auto-generated constructor stub
 	}
@@ -16,26 +17,26 @@ public class QueenChessPiece extends BaseChessPiece {
         int r = pos / 8;
         int c = pos % 8;
 
-        String player = Character.isUpperCase(board.getFromBoard(boardTag, r, c)) ? "white" : "black";
+        String player = Character.isUpperCase(board.getFromBoard(boardTag, r, c)) ? Constants.PLAYER_WHITE : Constants.PLAYER_BLACK;
 
-        // use i and j to indicate the direction of the move, for example (1, 1) refers to moving southeast
+        // use i and j to indicate the direction of the move, for example (0, 1) refers to moving right
         for(int i = -1; i <= 1; i++){
-            for(int j = -1; j <= 1; j++) {
-                if (!(i == 0 && j == 0)) {
+            for(int j = -1; j <= 1; j++){
+                if((i == 0 && j != 0) || (i != 0 && j == 0)){
                     // steps indicates how far the move is from the original position
                     int steps = 1;
-                    try {
+                    try{
                         // keep trying while the path is empty, else check if the piece on the path is an enemy piece
-                        while (board.getFromBoard(boardTag, r + i * steps, c + j * steps) == ' ') {
+                        while(board.getFromBoard(boardTag, r + i * steps, c + j * steps) == ' '){
                             // if the target position on the opposite board is empty and king is safe after the move
                             // then we can make the move
-                            if (board.getFromBoard((boardTag * 2) % 3, r + i * steps, c + j * steps) == ' ') {
-                                char ch = player.equals("white") ? 'Q' : 'q';
-                                // update the board to check if king is still safe after the rook move
+                            if(board.getFromBoard((boardTag * 2) % 3, r + i * steps, c + j * steps) == ' '){
+                                char ch = player.equals(Constants.PLAYER_WHITE) ? 'R' : 'r';
+                                // update the board to can check if king is still safe after the rook move
                                 board.setBoard(boardTag, r, c, ' ');
                                 board.setBoard((boardTag * 2) % 3, r + i * steps, c + j * steps, ch);
-                                if (isKingSafe(player)) {
-                                    moves.add(player + " moves Q from " + boardTag + " " +
+                                if(isKingSafe(player)) {
+                                    moves.add(player + " moves R from " + boardTag + " " +
                                             board.getCol()[c] + board.getRow()[r] + " to " +
                                             board.getCol()[c + j * steps] + board.getRow()[r + i * steps]);
                                 }
@@ -46,18 +47,17 @@ public class QueenChessPiece extends BaseChessPiece {
                             steps++;
                         }
                         // can catch enemy piece
-                        if (Character.isUpperCase(board.getFromBoard(boardTag, r + i * steps, c + j * steps)) !=
-                                player.equals("white")) {
-                            // check if the corresponding position on the other board is empty
-                            if (board.getFromBoard((boardTag * 2) % 3, r + i * steps, c + j * steps) == ' ') {
-                                char ch = player.equals("white") ? 'Q' : 'q';
+                        if(Character.isUpperCase(board.getFromBoard(boardTag, r + i * steps, c + j * steps)) !=
+                                player.equals(Constants.PLAYER_WHITE)){
+                            if(board.getFromBoard((boardTag * 2) % 3, r + i * steps, c + j * steps) == ' '){
+                                char ch = player.equals(Constants.PLAYER_WHITE) ? 'R' : 'r';
                                 char enemy = board.getFromBoard(boardTag, r + i * steps, c + j * steps);
-                                // temporarily update the board to check if king is still safe after the rook move
-                                board.setBoard(boardTag, r, c, ' ');
-                                board.setBoard(boardTag, r + i * steps, c + j * steps, ' ');
-                                board.setBoard((boardTag * 2) % 3, r + i * steps, c + j * steps, ch);
-                                if (isKingSafe(player)) {
-                                    moves.add(player + " moves Q from " + boardTag + " " +
+                                // temporarily update the board to can check if king is still safe after the rook move
+                                board.setBoard(boardTag, r, c, ' '); // previous rook pos
+                                board.setBoard(boardTag, r + i * steps, c + j * steps, ' '); // previous enemy pos
+                                board.setBoard((boardTag * 2) % 3, r + i * steps, c + j * steps, ch); // new rook pos
+                                if(isKingSafe(player)) {
+                                    moves.add(player + " moves R from " + boardTag + " " +
                                             board.getCol()[c] + board.getRow()[r] + " to " +
                                             board.getCol()[c + j * steps] + board.getRow()[r + i * steps]);
                                 }
@@ -67,12 +67,14 @@ public class QueenChessPiece extends BaseChessPiece {
                                 board.setBoard((boardTag * 2) % 3, r + i * steps, c + j * steps, ' ');
                             }
                         }
-                    } catch (Exception e) {
                     }
+                    catch (Exception e){}
                 }
             }
         }
 		
 	}
+	
+	
 
 }

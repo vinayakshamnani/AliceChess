@@ -1,6 +1,7 @@
-package ai;
+package ai.pieces;
 
 import java.util.List;
+import util.Constants;
 
 import model.Board;
 
@@ -16,7 +17,7 @@ public class BishopChessPiece extends BaseChessPiece {
         int r = pos / 8;
         int c = pos % 8;
 
-        String player = Character.isUpperCase(board.getFromBoard(boardTag, r, c)) ? "white" : "black";
+        String player = Character.isUpperCase(board.getFromBoard(boardTag, r, c)) ? Constants.PLAYER_WHITE : Constants.PLAYER_BLACK;
 
         // use i and j to indicate the direction of the move, for example (1, 1) refers to moving southeast
         for(int i = -1; i <= 1; i+=2){
@@ -29,7 +30,7 @@ public class BishopChessPiece extends BaseChessPiece {
                         // if the target position on the opposite board is empty and king is safe after the move
                         // then we can make the move
                         if(board.getFromBoard((boardTag * 2) % 3, r + i * steps, c + j * steps) == ' '){
-                            char ch = player.equals("white") ? 'B' : 'b';
+                            char ch = player.equals(Constants.PLAYER_WHITE) ? Constants.WHITE_BISHOP : Constants.BLACK_BISHOP;
                             // update the board to check if king is still safe after the rook move
                             board.setBoard(boardTag, r, c, ' ');
                             board.setBoard((boardTag * 2) % 3, r + i * steps, c + j * steps, ch);
@@ -46,10 +47,10 @@ public class BishopChessPiece extends BaseChessPiece {
                     }
                     // can catch enemy piece
                     if(Character.isUpperCase(board.getFromBoard(boardTag, r + i * steps, c + j * steps)) !=
-                            player.equals("white")){
+                            player.equals(Constants.PLAYER_WHITE)){
                         // check if the corresponding position on the other board is empty
                         if(board.getFromBoard((boardTag * 2) % 3, r + i * steps, c + j * steps) == ' '){
-                            char ch = player.equals("white") ? 'B' : 'b';
+                            char ch = player.equals(Constants.PLAYER_WHITE) ? 'B' : 'b';
                             char enemy = board.getFromBoard(boardTag, r + i * steps, c + j * steps);
                             // temporarily update the board to check if king is still safe after the rook move
                             board.setBoard(boardTag, r, c, ' ');

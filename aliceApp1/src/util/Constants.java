@@ -16,5 +16,16 @@ public class Constants {
 	public static final char BLACK_QUEEN = 'q';
 	public static final char BLACK_KING = 'k';
 	
+	public static final String PLAYER_WHITE = "white";
+	public static final String PLAYER_BLACK = "black";
+	
+	
+	public static final char CAP_A = 'A';
+	public static final char CAP_Z = 'Z';
+	
+	public static final char SMALL_A = 'a';
+	public static final char SMALL_Z = 'z';
+	
+	public static final int STRENGTH_PAWN = 10;
 
 }

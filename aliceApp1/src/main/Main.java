@@ -1,11 +1,11 @@
 package main;
 
 import java.util.List;
-//import java.util.Random;
 import java.util.Scanner;
 
 import ai.AliceAI;
 import ai.AliceAIFactory;
+import util.Constants;
 
 /**
  * Main class for running the program
@@ -31,10 +31,10 @@ public class Main {
         String readColor = sc.nextLine();
         
         // read the player color
-        String player = readColor.equals("you are white") ? "white" : "black";
+        String player = readColor.equals("you are white") ? Constants.PLAYER_WHITE : Constants.PLAYER_BLACK;
 
         //white first move
-        if(player.equals("white")) {
+        if(player.equals(Constants.PLAYER_WHITE)) {
             String bestMove = ai.pickBestMove(true);
             System.out.println(bestMove);
             ai.update(bestMove);
@@ -45,7 +45,7 @@ public class Main {
             String read = sc.nextLine();
             if(read.substring(6, 11).equals("moves")) {
                 // check if the move is legal, if it is, update the board
-                if(player.equals("white")){
+                if(player.equals(Constants.PLAYER_WHITE)){
                     List<String> legalMoves = ai.nextBlackMoves();
                     if(!legalMoves.contains(read)){
                         System.out.println("Illegal move!");
@@ -62,7 +62,7 @@ public class Main {
             	ai.update(read);
 
             	// check if the move made player to surrender, if it is, update the board
-                if(player.equals("white")){
+                if(player.equals(Constants.PLAYER_WHITE)){
                     List<String> whiteMoves = ai.nextWhiteMoves();
                     if(whiteMoves.size() == 0){
                     	System.out.println(player + " surrenders");

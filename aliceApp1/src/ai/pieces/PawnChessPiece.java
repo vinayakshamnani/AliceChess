@@ -1,6 +1,7 @@
-package ai;
+package ai.pieces;
 
 import java.util.List;
+import util.Constants;
 
 import model.Board;
 
@@ -15,7 +16,7 @@ public class PawnChessPiece extends BaseChessPiece {
         int r = pos / 8;
         int c = pos % 8;
         int dir = name == 'P' ? -1 : 1;
-        String player = (dir == -1) ? "white" : "black";
+        String player = (dir == -1) ? Constants.PLAYER_WHITE : Constants.PLAYER_BLACK;
         char ini_pos = (dir == -1) ? '2' : '7';
         char ch = name;
 
@@ -61,7 +62,7 @@ public class PawnChessPiece extends BaseChessPiece {
         try{
             for(int i = -1; i <= 1; i+=2) {
                 if (board.getFromBoard(boardTag, r + dir, c + i) != ' ' &&
-                        Character.isUpperCase(board.getFromBoard(boardTag, r + dir, c + i)) != player.equals("white")
+                        Character.isUpperCase(board.getFromBoard(boardTag, r + dir, c + i)) != player.equals(Constants.PLAYER_WHITE)
                         && board.getFromBoard((boardTag * 2) % 3, r + dir, c + i) == ' '){
                     char enemy = board.getFromBoard(boardTag, r + dir, c + i);
                     // temporarily update the board to check if the king is still safe after the move

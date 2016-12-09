@@ -1,8 +1,10 @@
-package ai;
+package ai.pieces;
 
 import java.util.ArrayList;
+
 import java.util.Arrays;
 import java.util.List;
+import util.Constants;
 
 import model.Board;
 
@@ -28,7 +30,7 @@ public class KnightChessPiece extends BaseChessPiece {
         candidates.add(Arrays.asList(r - 2, c + 1));
         candidates.add(Arrays.asList(r - 1, c + 2));
 
-        String player = Character.isUpperCase(board.getFromBoard(boardTag, r, c)) ? "white" : "black";
+        String player = Character.isUpperCase(board.getFromBoard(boardTag, r, c)) ? Constants.PLAYER_WHITE : Constants.PLAYER_BLACK;
 
         for(List<Integer> list : candidates){
             // check if the target place is within the board
@@ -39,7 +41,7 @@ public class KnightChessPiece extends BaseChessPiece {
                                 Character.isUpperCase(board.getFromBoard(boardTag, r, c))){
                     // check if the corresponding place on the other board is empty
                     if(board.getFromBoard((boardTag * 2) % 3, list.get(0), list.get(1)) == ' '){
-                        char ch = player.equals("white") ? 'N' : 'n';
+                        char ch = player.equals(Constants.PLAYER_WHITE) ? 'N' : 'n';
                         char enemy = board.getFromBoard(boardTag, list.get(0), list.get(1));
                         // temporarily update the board to check if the king is still safe
                         board.setBoard(boardTag, r, c, ' ');

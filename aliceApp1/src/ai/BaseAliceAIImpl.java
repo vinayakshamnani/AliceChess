@@ -3,9 +3,9 @@ package ai;
 import model.Board;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
+import ai.pieces.IChessPiece;
 import util.Constants;
 import util.MoveFilter;
 
@@ -54,18 +54,10 @@ public class BaseAliceAIImpl implements AliceAI {
 	}
 	
 	public void nextWhiteMoves(char[][] board, int boardTag, List<String> moves) {
-        for(int i = 0; i < 64; i++){
-        	boolean found = false;
-        	for(IChessPiece p : chessPieces) {
-        		if(p.getPieceName() > 'A' && p.getPieceName() < 'Z' && p.getPieceName() == board[i / 8][i % 8]) {
+        for(int i = 0; i < 64; i++)
+        	for(IChessPiece p : chessPieces) 
+        		if(p.getPieceName() > Constants.CAP_A && p.getPieceName() < Constants.CAP_Z && p.getPieceName() == board[i / 8][i % 8]) 
         			p.movePiece(boardTag, i, moves);
-        			found = true;
-        		}
-        	}
-        	
-        	
-            
-        }
 	}
 	
 	
@@ -76,10 +68,10 @@ public class BaseAliceAIImpl implements AliceAI {
         List<String> moves = new ArrayList<String>();
         
         /* Loop through all positions on the first board and find out if a move can be made by the piece */
-        nextWhiteMoves(board.getBoardA(), board.BOARD_A, moves);
+        nextWhiteMoves(board.getBoardA(), Board.BOARD_A, moves);
         
         /* Loop through all positions on the second board and find out if a move can be made by the piece */
-        nextWhiteMoves(board.getBoardB(), board.BOARD_B, moves);
+        nextWhiteMoves(board.getBoardB(), Board.BOARD_B, moves);
         
         /* Finally return the List of moves. If this is empty, the calling program should give up. */
         return moves;
@@ -87,19 +79,10 @@ public class BaseAliceAIImpl implements AliceAI {
 
     
     public void nextBlackMoves(char[][]board, int boardTag, List<String> moves){
-        for(int i = 0; i < 64; i++){
-        	
-        	boolean found = false;
-        	for(IChessPiece p : chessPieces) {
-        		if(p.getPieceName() > 'a' && p.getPieceName() < 'z' && p.getPieceName() == board[i / 8][i % 8]) {
-        			p.movePiece(boardTag, i, moves);
-        			found = true;
-        		}
-        	}
-        	
-        	
-            
-        }       
+        for(int i = 0; i < 64; i++) 
+        	for(IChessPiece p : chessPieces) 
+        		if(p.getPieceName() > Constants.SMALL_A && p.getPieceName() < Constants.SMALL_Z && p.getPieceName() == board[i / 8][i % 8]) 
+        			p.movePiece(boardTag, i, moves);      
     }
 
     /**
@@ -109,10 +92,10 @@ public class BaseAliceAIImpl implements AliceAI {
     	List<String> moves = new ArrayList<String>();
     	
     	/* Loop through all positions on the first board and find out if a move can be made by the piece */
-    	nextBlackMoves(board.getBoardA(), board.BOARD_A, moves);
+    	nextBlackMoves(board.getBoardA(), Board.BOARD_A, moves);
     	
     	/* Loop through all positions on the second board and find out if a move can be made by the piece */
-    	nextBlackMoves(board.getBoardB(), board.BOARD_B, moves);
+    	nextBlackMoves(board.getBoardB(), Board.BOARD_B, moves);
     	
     	/* Finally return the List of moves. If this is empty, the calling program should give up. */
     	return moves;
@@ -125,7 +108,7 @@ public class BaseAliceAIImpl implements AliceAI {
         int boardTag = s.charAt(19) - '0';
         char ch = s.charAt(12);
         String color = s.substring(0, 5);
-        if(color.equals("black")) ch = Character.toLowerCase(ch);
+        if(color.equals(Constants.PLAYER_BLACK)) ch = Character.toLowerCase(ch);
         int preCol = s.charAt(21) - 'a';
         int preRow = 8 - (s.charAt(22) - '0');
         int col = s.charAt(27) - 'a';
@@ -140,7 +123,7 @@ public class BaseAliceAIImpl implements AliceAI {
         board.setBoard(boardTag, row, col, ' ');
         board.setBoard((boardTag * 2) % 3, row, col, ch);
 
-        printBoard();
+        //printBoard();
     }
 
     private void printBoard() {
@@ -174,7 +157,7 @@ public class BaseAliceAIImpl implements AliceAI {
     }
 
     private String miniMax(int depth, boolean isMaxPlayer){
-        String player = isMaxPlayer? "white" : "black";
+        String player = isMaxPlayer? Constants.PLAYER_WHITE : Constants.PLAYER_BLACK;
         String bestMove = player + " surrenders";
         int highValue = Integer.MIN_VALUE;
         int lowValue = Integer.MAX_VALUE;
@@ -192,7 +175,7 @@ public class BaseAliceAIImpl implements AliceAI {
             int boardTag = s.charAt(19) - '0';
             char ch = s.charAt(12);
             String color = s.substring(0, 5);
-            if(color.equals("black")) ch = Character.toLowerCase(ch);
+            if(color.equals(Constants.PLAYER_BLACK)) ch = Character.toLowerCase(ch);
             int preCol = s.charAt(21) - 'a';
             int preRow = 8 - (s.charAt(22) - '0');
             int col = s.charAt(27) - 'a';
@@ -236,7 +219,7 @@ public class BaseAliceAIImpl implements AliceAI {
             int boardTag = s.charAt(19) - '0';
             char ch = s.charAt(12);
             String color = s.substring(0, 5);
-            if(color.equals("black")) ch = Character.toLowerCase(ch);
+            if(color.equals(Constants.PLAYER_BLACK)) ch = Character.toLowerCase(ch);
             int preCol = s.charAt(21) - 'a';
             int preRow = 8 - (s.charAt(22) - '0');
             int col = s.charAt(27) - 'a';
@@ -270,7 +253,7 @@ public class BaseAliceAIImpl implements AliceAI {
             int boardTag = s.charAt(19) - '0';
             char ch = s.charAt(12);
             String color = s.substring(0, 5);
-            if(color.equals("black")) ch = Character.toLowerCase(ch);
+            if(color.equals(Constants.PLAYER_BLACK)) ch = Character.toLowerCase(ch);
             int preCol = s.charAt(21) - 'a';
             int preRow = 8 - (s.charAt(22) - '0');
             int col = s.charAt(27) - 'a';
@@ -292,6 +275,42 @@ public class BaseAliceAIImpl implements AliceAI {
         return bestValue;
     }
 
+    private int[] evaluate(char[][] board) {
+    	int sumWhite = 0;
+    	int sumBlack = 0;
+    	
+    	for(int i = 0; i < 64; i++){
+            switch (board[i / 8][i % 8]){
+                case 'P' : sumWhite += Constants.STRENGTH_PAWN;
+                    break;
+                case 'R' : sumWhite += 82;
+                    break;
+                case 'N' : sumWhite += 32;
+                    break;
+                case 'B' : sumWhite += 54;
+                    break;
+                case 'Q' : sumWhite += 132;
+                    break;
+                case 'K' : sumWhite += 10000;
+                    break;
+                case 'p' : sumBlack += Constants.STRENGTH_PAWN;
+                    break;
+                case 'r' : sumBlack += 82;
+                    break;
+                case 'n' : sumBlack += 32;
+                    break;
+                case 'b' : sumBlack += 54;
+                    break;
+                case 'q' : sumBlack += 132;
+                    break;
+                case 'k' : sumBlack += 10000;
+                    break;
+            }
+        }
+    	
+    	return new int[] {sumWhite, sumBlack};
+    }
+    
     /**
      * This function evaluate the current board and return a score which is calculated by considering
      * the pieces, check, move ability, and ...
@@ -303,76 +322,17 @@ public class BaseAliceAIImpl implements AliceAI {
         int sumBlack = 0;
 
         // add the weight of active pieces to score
-        for(int i = 0; i < 64; i++){
-            switch (board.getBoardA()[i / 8][i % 8]){
-                case 'P' : sumWhite += 10;
-                    break;
-                case 'R' : sumWhite += 82;
-                    break;
-                case 'N' : sumWhite += 32;
-                    break;
-                case 'B' : sumWhite += 54;
-                    break;
-                case 'Q' : sumWhite += 132;
-                    break;
-                case 'K' : sumWhite += 0;
-                    break;
-                case 'p' : sumBlack += 10;
-                    break;
-                case 'r' : sumBlack += 82;
-                    break;
-                case 'n' : sumBlack += 32;
-                    break;
-                case 'b' : sumBlack += 54;
-                    break;
-                case 'q' : sumBlack += 132;
-                    break;
-                case 'k' : sumBlack += 0;
-                    break;
-            }
-        }
-
-        for(int i = 0; i < 64; i++){
-            switch (board.getBoardB()[i / 8][i % 8]){
-                case 'P' : sumWhite += 10;
-                    break;
-                case 'R' : sumWhite += 82;
-                    break;
-                case 'N' : sumWhite += 32;
-                    break;
-                case 'B' : sumWhite += 54;
-                    break;
-                case 'Q' : sumWhite += 132;
-                    break;
-                case 'K' : sumWhite += 0;
-                    break;
-                case 'p' : sumBlack += 10;
-                    break;
-                case 'r' : sumBlack += 82;
-                    break;
-                case 'n' : sumBlack += 32;
-                    break;
-                case 'b' : sumBlack += 54;
-                    break;
-                case 'q' : sumBlack += 132;
-                    break;
-                case 'k' : sumBlack += 0;
-                    break;
-            }
-        }
+        int[] sums = evaluate(board.getBoardA());
+        sumWhite += sums[0];
+        sumBlack += sums[1];
+        
+        sums = evaluate(board.getBoardB());
+        sumWhite += sums[0];
+        sumBlack += sums[1];
 
         // add points for check
-        
-        if(!chessPieces.get(0).isKingSafe("white")) sumBlack += 1;
-        if(!chessPieces.get(0).isKingSafe("black")) sumWhite += 1;
-
-        // add points for move ability
-//        if(isMaxPlayer){
-//            sumWhite += (20 - nextBlackMoves().size());
-//        }
-//        if(!isMaxPlayer){
-//            sumBlack -= (20 - nextWhiteMoves().size());
-//        }
+        if(!chessPieces.get(0).isKingSafe(Constants.PLAYER_WHITE)) sumBlack += 1;
+        if(!chessPieces.get(0).isKingSafe(Constants.PLAYER_BLACK)) sumWhite += 1;
 
         return sumWhite - sumBlack;
     }

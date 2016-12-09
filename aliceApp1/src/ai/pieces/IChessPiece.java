@@ -1,8 +1,7 @@
-package ai;
+package ai.pieces;
 
 import java.util.List;
 
-import model.Board;
 
 public interface IChessPiece {
 	

@@ -2,6 +2,7 @@ package ai;
 
 import java.util.List;
 
+import ai.pieces.IChessPiece;
 import model.Board;
 
 /**

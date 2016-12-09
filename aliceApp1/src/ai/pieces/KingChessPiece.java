@@ -1,6 +1,7 @@
-package ai;
+package ai.pieces;
 
 import java.util.List;
+import util.Constants;
 
 import model.Board;
 
@@ -16,7 +17,7 @@ public class KingChessPiece extends BaseChessPiece {
         int r = pos / 8;
         int c = pos % 8;
 
-        String player = Character.isUpperCase(board.getFromBoard(boardTag, r, c)) ? "white" : "black";
+        String player = Character.isUpperCase(board.getFromBoard(boardTag, r, c)) ? Constants.PLAYER_WHITE : Constants.PLAYER_BLACK;
 
         // move around by 1 step
         for(int i = 0; i < 9; i++){
@@ -27,10 +28,10 @@ public class KingChessPiece extends BaseChessPiece {
                 if(r1 >= 0 && r1 < 8 && c1 >= 0 && c1 < 8){
                     // check if the target position is empty or occupied by an enemy piece
                     if(board.getFromBoard(boardTag, r1, c1) == ' ' ||
-                            player.equals("white") != Character.isUpperCase(board.getFromBoard(boardTag, r1, c1))){
+                            player.equals(Constants.PLAYER_WHITE) != Character.isUpperCase(board.getFromBoard(boardTag, r1, c1))){
                         // check if the corresponding position on the other board is empty
                         if(board.getFromBoard((boardTag * 2) % 3, r1, c1) == ' '){
-                            char ch = player.equals("white") ? 'K' : 'k';
+                            char ch = player.equals(Constants.PLAYER_WHITE) ? 'K' : 'k';
                             char enemy = board.getFromBoard(boardTag, r1, c1);
                             // Here we need two rounds of checks, first we need to check if the move is legal on the
                             // original board. Then we need to check if the move is also legal after the king was

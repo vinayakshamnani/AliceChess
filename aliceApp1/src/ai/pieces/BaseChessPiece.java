@@ -1,10 +1,11 @@
-package ai;
+package ai.pieces;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import model.Board;
+import util.Constants;
 
 public abstract class BaseChessPiece implements IChessPiece {
 	Board board;
@@ -47,7 +48,7 @@ public abstract class BaseChessPiece implements IChessPiece {
         int c_k = pos_k % 8;
 
         // check if king is under attack by an enemy pawn
-        if(player.equals("white")){
+        if(player.equals(Constants.PLAYER_WHITE)){
             try {
                 if (board.getFromBoard(boardTag_K, r_K - 1, c_K - 1) == 'p') {
                     return false;
@@ -78,7 +79,7 @@ public abstract class BaseChessPiece implements IChessPiece {
 
         // check knight
         List<List<Integer>> candidates = new ArrayList<List<Integer>>();
-        if(player.equals("white")) {
+        if(player.equals(Constants.PLAYER_WHITE)) {
             candidates.add(Arrays.asList(r_K + 1, c_K + 2));
             candidates.add(Arrays.asList(r_K + 2, c_K + 1));
             candidates.add(Arrays.asList(r_K + 2, c_K - 1));
@@ -112,7 +113,7 @@ public abstract class BaseChessPiece implements IChessPiece {
         }
 
         // check bishop or queen
-        if(player.equals("white")) {
+        if(player.equals(Constants.PLAYER_WHITE)) {
             // use i and j to indicate the direction of the move, for example (1, 1) refers to moving southeast
             for (int i = -1; i <= 1; i += 2) {
                 for (int j = -1; j <= 1; j += 2) {
@@ -154,7 +155,7 @@ public abstract class BaseChessPiece implements IChessPiece {
         }
 
         // check rook or queen
-        if(player.equals("white")){
+        if(player.equals(Constants.PLAYER_WHITE)){
             for(int i = -1; i <= 1; i++){
                 for(int j = -1; j <= 1; j++){
                     if((i == 0 && j != 0) || (i != 0 && j == 0)){
@@ -200,7 +201,7 @@ public abstract class BaseChessPiece implements IChessPiece {
         }
 
         // check king
-        if(player.equals("white")){
+        if(player.equals(Constants.PLAYER_WHITE)){
             for(int i = 0; i < 9; i++) {
                 if (i != 4) {
                     int r1 = r_K - 1 + i / 3;
