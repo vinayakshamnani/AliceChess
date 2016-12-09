@@ -49,8 +49,12 @@ public class Constants {
 	// Constant for representing zero
 	public static final char ZERO = '0';
 	
-	// Constant for surrender string
+	// Constant for move strings
 	public static final String SURRENDERS = " surrenders";
+	public static final String MOVES = "moves";
+	public static final String OFFERS = "offers";
+	public static final String ACCEPTS_DRAW = " accepts draw";
+	public static final String DECLINES_DRAW = "declines";
 
 
 	/**
