@@ -60,10 +60,10 @@ public class BaseAliceAIImpl implements AliceAI {
         List<String> moves = new ArrayList<String>();
         
         /* Loop through all positions on the first board and find out if a move can be made by the piece */
-        nextWhiteMoves(board.getBoardA(), Board.BOARD_A, moves);
+        nextWhiteMoves(board.getBoardA(), Constants.BOARD_A, moves);
         
         /* Loop through all positions on the second board and find out if a move can be made by the piece */
-        nextWhiteMoves(board.getBoardB(), Board.BOARD_B, moves);
+        nextWhiteMoves(board.getBoardB(), Constants.BOARD_B, moves);
         
         /* Finally return the List of moves. If this is empty, the calling program should give up. */
         return moves;
@@ -99,10 +99,10 @@ public class BaseAliceAIImpl implements AliceAI {
         List<String> moves = new ArrayList<String>();
 
     	/* Loop through all positions on the first board and find out if a move can be made by the piece */
-        nextBlackMoves(board.getBoardA(), Board.BOARD_A, moves);
+        nextBlackMoves(board.getBoardA(), Constants.BOARD_A, moves);
 
     	/* Loop through all positions on the second board and find out if a move can be made by the piece */
-        nextBlackMoves(board.getBoardB(), Board.BOARD_B, moves);
+        nextBlackMoves(board.getBoardB(),Constants.BOARD_B, moves);
 
     	/* Finally return the List of moves. If this is empty, the calling program should give up. */
         return moves;

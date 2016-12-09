@@ -10,22 +10,6 @@ import java.util.List;
  *
  */
 public class MoveFilter {
-
-	/**
-	 * check if the list contains given move
-	 * 
-	 * @param moves - list of moves
-	 * @param move  - the move
-	 * @return true if list contains given move
-	 */
-	public static boolean containsInListIgnoringCase(List<String> moves, String move) {
-		for(int i = 0; i < moves.size(); ++i) {
-			if(move.toLowerCase().equals(moves.get(i).toLowerCase()))
-				return true;
-		}
-		
-		return false;
-	}
 	
 	/**
 	 * Sort the moves by filtering low value moves

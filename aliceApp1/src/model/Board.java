@@ -1,5 +1,7 @@
 package model;
 
+import util.Constants;
+
 /**
  * The model class that holds the game state
  * This is as simple as holding a 2D array of the chess boards.
@@ -10,15 +12,7 @@ package model;
  *
  */
 public class Board {
-	/**
-	 * A simple notation of Board A
-	 */
-	public static final int BOARD_A = 1;
 	
-	/**
-	 * A simple notation of Board B
-	 */
-	public static final int BOARD_B = 2;
 	
 	/**
 	 * A notation of the rows.
@@ -69,7 +63,7 @@ public class Board {
      * @return      - the piece info present at the given position
      */
     public char getFromBoard(int board, int row, int col) {
-    	return board == BOARD_A ? boardA[row][col] : boardB[row][col];
+    	return board == Constants.BOARD_A ? boardA[row][col] : boardB[row][col];
     }
 
     /**
@@ -81,7 +75,7 @@ public class Board {
      * @param ch       - the piece info to set at the given position
      */
 	public void setBoard(int boardTag, int row, int col, char ch) {
-		if(boardTag == BOARD_A) {
+		if(boardTag == Constants.BOARD_A) {
 			boardA[row][col] = ch;
 		}
 		else{

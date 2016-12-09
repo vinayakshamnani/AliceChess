@@ -117,5 +117,14 @@ public class Constants {
 			{-20,-10,-10, -5, -5,-10,-10,-20},
 	};
 
+	/**
+	 * A simple notation of Board A
+	 */
+	public static final int BOARD_A = 1;
+	
+	/**
+	 * A simple notation of Board B
+	 */
+	public static final int BOARD_B = 2;
 
 }
