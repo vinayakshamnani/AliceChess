@@ -48,14 +48,14 @@ public class Main {
                 if(player.equals(Constants.PLAYER_WHITE)){
                     List<String> legalMoves = ai.nextBlackMoves();
                     if(!legalMoves.contains(read)){
-                        System.out.println("Illegal move!");
+                        //System.out.println("Illegal move!");
                         break;
                     }
                 }
                 else{
                     List<String> legalMoves = ai.nextWhiteMoves();
                     if(!legalMoves.contains(read)){
-                        System.out.println("Illegal move!");
+                        //System.out.println("Illegal move!");
                         break;
                     }
                 }
