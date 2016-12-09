@@ -9,4 +9,6 @@ public interface IChessPiece {
 	char getPieceName();
 
 	void movePiece(int boardTag, int pos, List<String> moves);
+	
+	boolean isKingSafe(String player);
 }

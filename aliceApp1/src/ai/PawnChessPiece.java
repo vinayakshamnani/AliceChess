@@ -3,16 +3,14 @@ package ai;
 import java.util.List;
 
 import model.Board;
-import util.Constants;
 
-public class PawnChessPiece extends BaseChessPiece implements IChessPiece {
+public class PawnChessPiece extends BaseChessPiece {
 
 	public PawnChessPiece(Board board, char pieceName) {
-		 super(board);
-		 name = pieceName;
+		 super(board, pieceName);
 	}
 	
-	
+	@Override
 	public void movePiece(int boardTag, int pos, List<String> moves){
         int r = pos / 8;
         int c = pos % 8;

@@ -11,8 +11,9 @@ public abstract class BaseChessPiece implements IChessPiece {
 	
 	protected char name;
 
-	public BaseChessPiece(Board board) {
+	public BaseChessPiece(Board board, char name) {
 		this.board = board;
+		this.name = name;
 	}
 	
 	public char getPieceName() {

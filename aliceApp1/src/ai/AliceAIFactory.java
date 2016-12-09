@@ -1,5 +1,7 @@
 package ai;
 
+import util.Constants;
+
 /**
  * The Factory class for the AI module.
  * All the prototypes/implementations for the required components are mapped here.
@@ -51,8 +53,24 @@ public class AliceAIFactory {
 	public AliceAI getAIComponent() {
 		// As of now, mapped BaseAliceAIImpl to AliceAI api.
 		AliceAI aiComponent = new BaseAliceAIImpl();
-		aiComponent.addChessPieceToAI(new PawnChessPiece(aiComponent.getAIBoard(), 'P'));
-		aiComponent.addChessPieceToAI(new PawnChessPiece(aiComponent.getAIBoard(), 'p'));
+		
+		aiComponent.addChessPieceToAI(new PawnChessPiece(aiComponent.getAIBoard(), Constants.WHITE_PAWN));
+		aiComponent.addChessPieceToAI(new PawnChessPiece(aiComponent.getAIBoard(), Constants.BLACK_PAWN));
+		
+		aiComponent.addChessPieceToAI(new RookChessPiece(aiComponent.getAIBoard(), Constants.WHITE_ROOK));
+		aiComponent.addChessPieceToAI(new RookChessPiece(aiComponent.getAIBoard(), Constants.BLACK_ROOK));
+		
+		aiComponent.addChessPieceToAI(new KnightChessPiece(aiComponent.getAIBoard(), Constants.WHITE_KNIGHT));
+		aiComponent.addChessPieceToAI(new KnightChessPiece(aiComponent.getAIBoard(), Constants.BLACK_KNIGHT));
+		
+		aiComponent.addChessPieceToAI(new BishopChessPiece(aiComponent.getAIBoard(), Constants.WHITE_BISHOP));
+		aiComponent.addChessPieceToAI(new BishopChessPiece(aiComponent.getAIBoard(), Constants.BLACK_BISHOP));
+		
+		aiComponent.addChessPieceToAI(new QueenChessPiece(aiComponent.getAIBoard(), Constants.WHITE_QUEEN));
+		aiComponent.addChessPieceToAI(new QueenChessPiece(aiComponent.getAIBoard(), Constants.BLACK_QUEEN));
+		
+		aiComponent.addChessPieceToAI(new KingChessPiece(aiComponent.getAIBoard(), Constants.WHITE_KING));
+		aiComponent.addChessPieceToAI(new KingChessPiece(aiComponent.getAIBoard(), Constants.BLACK_KING));
 		
 		return aiComponent;
 	}
