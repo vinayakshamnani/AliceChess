@@ -40,7 +40,7 @@ public class Constants {
 	public static final int STRENGTH_KING = 20000;
 
 	// Constants for check values
-	public static final int CHECK = 50;
+	public static final int CHECK = 300;
 
 	// Constant for mini-max depth
 	public final static int DEPTH = 3;
