@@ -7,9 +7,16 @@ import java.util.List;
 import model.Board;
 import util.Constants;
 
+/**
+ * Abstract class for pieces 
+ * 
+ * @author Ajay
+ *
+ */
 public abstract class BaseChessPiece implements IChessPiece {
+	// Variable for board
 	Board board;
-	
+	// Variable for piece name
 	protected char name;
 
 	public BaseChessPiece(Board board, char name) {
@@ -17,27 +24,33 @@ public abstract class BaseChessPiece implements IChessPiece {
 		this.name = name;
 	}
 	
+	/**
+	 * Get the piece name
+	 */
 	public char getPieceName() {
 		return name;
 	}
 	
+	/**
+	 * Check if king is safe for the given player
+	 */
 	public boolean isKingSafe(String player) {
         // get the position of the king
         int boardTag_K = 0, pos_K = 0, boardTag_k = 0, pos_k = 0;
         for(int i = 0; i < 64; i++){
-            if(board.getBoardA()[i / 8][i % 8] == 'K'){
+            if(board.getBoardA()[i / 8][i % 8] == Constants.WHITE_KING){
                 boardTag_K = 1;
                 pos_K = i;
             }
-            if(board.getBoardB()[i / 8][i % 8] == 'K'){
+            if(board.getBoardB()[i / 8][i % 8] == Constants.WHITE_KING){
                 boardTag_K = 2;
                 pos_K = i;
             }
-            if(board.getBoardA()[i / 8][i % 8] == 'k'){
+            if(board.getBoardA()[i / 8][i % 8] == Constants.BLACK_KING){
                 boardTag_k = 1;
                 pos_k = i;
             }
-            if(board.getBoardB()[i / 8][i % 8] == 'k'){
+            if(board.getBoardB()[i / 8][i % 8] == Constants.BLACK_KING){
                 boardTag_k = 2;
                 pos_k = i;
             }
@@ -50,13 +63,13 @@ public abstract class BaseChessPiece implements IChessPiece {
         // check if king is under attack by an enemy pawn
         if(player.equals(Constants.PLAYER_WHITE)){
             try {
-                if (board.getFromBoard(boardTag_K, r_K - 1, c_K - 1) == 'p') {
+                if (board.getFromBoard(boardTag_K, r_K - 1, c_K - 1) == Constants.BLACK_PAWN) {
                     return false;
                 }
             }
             catch (Exception e){}
             try {
-                if (board.getFromBoard(boardTag_K, r_K - 1, c_K + 1) == 'p') {
+                if (board.getFromBoard(boardTag_K, r_K - 1, c_K + 1) == Constants.BLACK_PAWN) {
                     return false;
                 }
             }
@@ -64,13 +77,13 @@ public abstract class BaseChessPiece implements IChessPiece {
         }
         else{
             try {
-                if (board.getFromBoard(boardTag_k, r_k + 1, c_k - 1) == 'P') {
+                if (board.getFromBoard(boardTag_k, r_k + 1, c_k - 1) == Constants.WHITE_PAWN) {
                     return false;
                 }
             }
             catch (Exception e){}
             try {
-                if (board.getFromBoard(boardTag_k, r_k + 1, c_k + 1) == 'P') {
+                if (board.getFromBoard(boardTag_k, r_k + 1, c_k + 1) == Constants.WHITE_PAWN) {
                     return false;
                 }
             }
@@ -90,7 +103,7 @@ public abstract class BaseChessPiece implements IChessPiece {
             candidates.add(Arrays.asList(r_K - 1, c_K + 2));
             for (List<Integer> list : candidates) {
                 try {
-                    if (board.getFromBoard(boardTag_K, list.get(0), list.get(1)) == 'n') return false;
+                    if (board.getFromBoard(boardTag_K, list.get(0), list.get(1)) == Constants.BLACK_KNIGHT) return false;
                 }
                 catch (Exception e) {}
             }
@@ -106,7 +119,7 @@ public abstract class BaseChessPiece implements IChessPiece {
             candidates.add(Arrays.asList(r_k - 1, c_k + 2));
             for (List<Integer> list : candidates) {
                 try {
-                    if (board.getFromBoard(boardTag_k, list.get(0), list.get(1)) == 'N') return false;
+                    if (board.getFromBoard(boardTag_k, list.get(0), list.get(1)) == Constants.WHITE_KNIGHT) return false;
                 }
                 catch (Exception e) {}
             }
@@ -124,8 +137,8 @@ public abstract class BaseChessPiece implements IChessPiece {
                         while (board.getFromBoard(boardTag_K, r_K + i * steps, c_K + j * steps) == ' ') {
                             steps++;
                         }
-                        if (board.getFromBoard(boardTag_K, r_K + i * steps, c_K + j * steps) == 'b' ||
-                                board.getFromBoard(boardTag_K, r_K + i * steps, c_K + j * steps) == 'q') {
+                        if (board.getFromBoard(boardTag_K, r_K + i * steps, c_K + j * steps) == Constants.BLACK_BISHOP ||
+                                board.getFromBoard(boardTag_K, r_K + i * steps, c_K + j * steps) == Constants.BLACK_QUEEN) {
                             return false;
                         }
                     }
@@ -144,8 +157,8 @@ public abstract class BaseChessPiece implements IChessPiece {
                         while (board.getFromBoard(boardTag_k, r_k + i * steps, c_k + j * steps) == ' ') {
                             steps++;
                         }
-                        if (board.getFromBoard(boardTag_k, r_k + i * steps, c_k + j * steps) == 'B' ||
-                                board.getFromBoard(boardTag_k, r_k + i * steps, c_k + j * steps) == 'Q') {
+                        if (board.getFromBoard(boardTag_k, r_k + i * steps, c_k + j * steps) == Constants.WHITE_BISHOP ||
+                                board.getFromBoard(boardTag_k, r_k + i * steps, c_k + j * steps) == Constants.WHITE_QUEEN) {
                             return false;
                         }
                     }
@@ -167,8 +180,8 @@ public abstract class BaseChessPiece implements IChessPiece {
                             while(board.getFromBoard(boardTag_K, r_K + i * steps, c_K + j * steps) == ' '){
                                 steps++;
                             }
-                            if(board.getFromBoard(boardTag_K, r_K + i * steps, c_K + j * steps) == 'r' ||
-                                    board.getFromBoard(boardTag_K, r_K + i * steps, c_K + j * steps) == 'q'){
+                            if(board.getFromBoard(boardTag_K, r_K + i * steps, c_K + j * steps) == Constants.BLACK_ROOK ||
+                                    board.getFromBoard(boardTag_K, r_K + i * steps, c_K + j * steps) == Constants.BLACK_QUEEN){
                                 return false;
                             }
                         }
@@ -189,8 +202,8 @@ public abstract class BaseChessPiece implements IChessPiece {
                             while(board.getFromBoard(boardTag_k, r_k + i * steps, c_k + j * steps) == ' '){
                                 steps++;
                             }
-                            if(board.getFromBoard(boardTag_k, r_k + i * steps, c_k + j * steps) == 'R' ||
-                                    board.getFromBoard(boardTag_k, r_k + i * steps, c_k + j * steps) == 'Q'){
+                            if(board.getFromBoard(boardTag_k, r_k + i * steps, c_k + j * steps) == Constants.WHITE_ROOK ||
+                                    board.getFromBoard(boardTag_k, r_k + i * steps, c_k + j * steps) == Constants.WHITE_QUEEN){
                                 return false;
                             }
                         }
@@ -208,7 +221,7 @@ public abstract class BaseChessPiece implements IChessPiece {
                     int c1 = c_K - 1 + i % 3;
                     // check if the position is within the board
                     if (r1 >= 0 && r1 < 8 && c1 >= 0 && c1 < 8) {
-                        if (board.getFromBoard(boardTag_K, r1, c1) == 'k') {
+                        if (board.getFromBoard(boardTag_K, r1, c1) == Constants.BLACK_KING) {
                             return false;
                         }
                     }
@@ -222,7 +235,7 @@ public abstract class BaseChessPiece implements IChessPiece {
                     int c1 = c_k - 1 + i % 3;
                     // check if the position is within the board
                     if (r1 >= 0 && r1 < 8 && c1 >= 0 && c1 < 8) {
-                        if (board.getFromBoard(boardTag_k, r1, c1) == 'K') {
+                        if (board.getFromBoard(boardTag_k, r1, c1) == Constants.WHITE_KING) {
                             return false;
                         }
                     }
@@ -230,7 +243,5 @@ public abstract class BaseChessPiece implements IChessPiece {
             }
         }
         return true;
-    }
-
-	
+    }	
 }

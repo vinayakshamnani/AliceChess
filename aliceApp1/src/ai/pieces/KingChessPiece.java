@@ -5,13 +5,27 @@ import util.Constants;
 
 import model.Board;
 
+/**
+ * Class for representing king
+ * 
+ * @author Ajay
+ *
+ */
 public class KingChessPiece extends BaseChessPiece {
 
+	/**
+	 * Parameterized constructor for setting king on board
+	 * 
+	 * @param board - chess board model
+	 * @param name  - name of the piece
+	 */
 	public KingChessPiece(Board board, char name) {
 		super(board, name);
-		// TODO Auto-generated constructor stub
 	}
 
+	/**
+	 * move the king on the board
+	 */
 	@Override
 	public void movePiece(int boardTag, int pos, List<String> moves) {
         int r = pos / 8;
@@ -31,7 +45,7 @@ public class KingChessPiece extends BaseChessPiece {
                             player.equals(Constants.PLAYER_WHITE) != Character.isUpperCase(board.getFromBoard(boardTag, r1, c1))){
                         // check if the corresponding position on the other board is empty
                         if(board.getFromBoard((boardTag * 2) % 3, r1, c1) == ' '){
-                            char ch = player.equals(Constants.PLAYER_WHITE) ? 'K' : 'k';
+                            char ch = player.equals(Constants.PLAYER_WHITE) ? Constants.WHITE_KING : Constants.BLACK_KING;
                             char enemy = board.getFromBoard(boardTag, r1, c1);
                             // Here we need two rounds of checks, first we need to check if the move is legal on the
                             // original board. Then we need to check if the move is also legal after the king was

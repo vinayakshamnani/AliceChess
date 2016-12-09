@@ -5,17 +5,31 @@ import util.Constants;
 
 import model.Board;
 
+/**
+ * Class for representing pawn
+ * 
+ * @author Ajay
+ */
 public class PawnChessPiece extends BaseChessPiece {
 
+	/**
+	 * Parameterized constructor for setting pawn on board
+	 * 
+	 * @param board - chess board model
+	 * @param name  - name of the piece
+	 */
 	public PawnChessPiece(Board board, char pieceName) {
 		 super(board, pieceName);
 	}
 	
+	/**
+	 * move the pawn on the board
+	 */
 	@Override
 	public void movePiece(int boardTag, int pos, List<String> moves){
         int r = pos / 8;
         int c = pos % 8;
-        int dir = name == 'P' ? -1 : 1;
+        int dir = name == Constants.WHITE_PAWN ? -1 : 1;
         String player = (dir == -1) ? Constants.PLAYER_WHITE : Constants.PLAYER_BLACK;
         char ini_pos = (dir == -1) ? '2' : '7';
         char ch = name;
@@ -79,7 +93,9 @@ public class PawnChessPiece extends BaseChessPiece {
                     board.setBoard((boardTag * 2) % 3, r + dir, c + i, ' ');
                 }
             }
-        }catch (Exception e){}
+        }catch (Exception e){
+        	e.printStackTrace();
+        }
 
     }
 }

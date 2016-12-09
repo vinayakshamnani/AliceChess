@@ -8,13 +8,27 @@ import util.Constants;
 
 import model.Board;
 
+/**
+ * Class for representing knight
+ * 
+ * @author Ajay
+ *
+ */
 public class KnightChessPiece extends BaseChessPiece {
 
+	/**
+	 * Parameterized constructor for setting knight on board
+	 * 
+	 * @param board - chess board model
+	 * @param name  - name of the piece
+	 */
 	public KnightChessPiece(Board board, char name) {
 		super(board, name);
-		// TODO Auto-generated constructor stub
 	}
 
+	/**
+	 * move the knight on the board
+	 */
 	@Override
 	public void movePiece(int boardTag, int pos, List<String> moves) {
         int r = pos / 8;
@@ -41,7 +55,7 @@ public class KnightChessPiece extends BaseChessPiece {
                                 Character.isUpperCase(board.getFromBoard(boardTag, r, c))){
                     // check if the corresponding place on the other board is empty
                     if(board.getFromBoard((boardTag * 2) % 3, list.get(0), list.get(1)) == ' '){
-                        char ch = player.equals(Constants.PLAYER_WHITE) ? 'N' : 'n';
+                        char ch = player.equals(Constants.PLAYER_WHITE) ? Constants.WHITE_KNIGHT : Constants.BLACK_KNIGHT;
                         char enemy = board.getFromBoard(boardTag, list.get(0), list.get(1));
                         // temporarily update the board to check if the king is still safe
                         board.setBoard(boardTag, r, c, ' ');

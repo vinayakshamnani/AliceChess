@@ -22,16 +22,20 @@ import util.MoveFilter;
  */
 public class BaseAliceAIImpl implements AliceAI {
 	
-	final static int DEPTH = 3;
-	final static int filterThreshold = 39;
-	
+	// List of all chess pieces
 	private List<IChessPiece> chessPieces;
 	
+	/**
+	 * Default constructor
+	 */
 	public BaseAliceAIImpl()
 	{
 		chessPieces = new ArrayList<IChessPiece>();
 	}
 	
+	/**
+	 * Parameterized constructor to add new chess piece in the chessPieces
+	 */
 	public void addChessPieceToAI(IChessPiece chessPiece)
 	{
 		chessPieces.add(chessPiece);
@@ -42,17 +46,25 @@ public class BaseAliceAIImpl implements AliceAI {
 	 */
 	private Board board = new Board();
 	
+	/**
+	 * Get the AI board
+	 */
 	public Board getAIBoard() {
 		return board;
 	}
 
-	/**
-	 * This is not doing any thing as of now. Just returns the same input List of moves. 
-	 */
+	@Override
 	public List<String> filterMoves(List<String> validMoves) {
 		return validMoves;
 	}
 	
+	/**
+	 * Get the list of white player moves
+	 * 
+	 * @param board    - the board
+	 * @param boardTag - the board tag (1 or 2)
+	 * @param moves    - the list of moves
+	 */
 	public void nextWhiteMoves(char[][] board, int boardTag, List<String> moves) {
         for(int i = 0; i < 64; i++)
         	for(IChessPiece p : chessPieces) 
@@ -77,7 +89,13 @@ public class BaseAliceAIImpl implements AliceAI {
         return moves;
     }
 
-    
+    /**
+	 * Get the list of black player moves
+	 * 
+	 * @param board    - the board
+	 * @param boardTag - the board tag (1 or 2)
+	 * @param moves    - the list of moves
+	 */
     public void nextBlackMoves(char[][]board, int boardTag, List<String> moves){
         for(int i = 0; i < 64; i++) 
         	for(IChessPiece p : chessPieces) 
@@ -101,22 +119,24 @@ public class BaseAliceAIImpl implements AliceAI {
     	return moves;
     }
     
-    
+    /**
+     * Update the board model for the move (move is represented by string)
+     */
     public void update(String s) {
     	// From the input message, find out which board it is, the piece, the row and column
     	// it has moved from and to.
-        int boardTag = s.charAt(19) - '0';
+        int boardTag = s.charAt(19) - Constants.ZERO;
         char ch = s.charAt(12);
         String color = s.substring(0, 5);
         if(color.equals(Constants.PLAYER_BLACK)) ch = Character.toLowerCase(ch);
-        int preCol = s.charAt(21) - 'a';
-        int preRow = 8 - (s.charAt(22) - '0');
-        int col = s.charAt(27) - 'a';
-        int row = 8 - (s.charAt(28) - '0');
+        int preCol = s.charAt(21) - Constants.SMALL_A;
+        int preRow = 8 - (s.charAt(22) - Constants.ZERO);
+        int col = s.charAt(27) - Constants.SMALL_A;
+        int row = 8 - (s.charAt(28) - Constants.ZERO);
 
         // when a pawn reach the last row, it will be automatically promoted to a queen.
-        if(ch == 'P' && row == 0) ch = 'Q';
-        if(ch == 'p' && row == 7) ch = 'q';
+        if(ch == Constants.BLACK_PAWN && row == 0) ch = Constants.BLACK_QUEEN;
+        if(ch == Constants.WHITE_PAWN && row == 7) ch = Constants.WHITE_QUEEN;
 
         // Just update the board.
         board.setBoard(boardTag, preRow, preCol, ' ');
@@ -126,7 +146,8 @@ public class BaseAliceAIImpl implements AliceAI {
         //printBoard();
     }
 
-    private void printBoard() {
+    @SuppressWarnings("unused")
+	private void printBoard() {
         for(int i = 0; i < 8; i++){
             for(char c : board.getBoardA()[i]){
                 if(c == ' ') {
@@ -153,33 +174,46 @@ public class BaseAliceAIImpl implements AliceAI {
      */
     public String pickBestMove(boolean isMaxPlayer) {
         
-        return miniMax(DEPTH, isMaxPlayer);
+        return miniMax(Constants.DEPTH, isMaxPlayer);
     }
 
+    /**
+     * Minimax algorithm for finding the best move
+     * 
+     * @param depth        - depth is reached by the minimax
+     * @param isMaxPlayer  - the player for whom we need to max the score (max player)
+     * @return the string representation of the best move
+     */
     private String miniMax(int depth, boolean isMaxPlayer){
+    	// check which player we want to max score
         String player = isMaxPlayer? Constants.PLAYER_WHITE : Constants.PLAYER_BLACK;
-        String bestMove = player + " surrenders";
+        // initial best move is surrender
+        String bestMove = player + Constants.SURRENDERS;
+        // Setting high and low values
         int highValue = Integer.MIN_VALUE;
         int lowValue = Integer.MAX_VALUE;
         int currentValue;
 
+        // get all moves of the max player
         List<String> nonSortedMoves = isMaxPlayer ? nextWhiteMoves() : nextBlackMoves();
-        List<String> nextMoves = MoveFilter.SortMovesByPiece(nonSortedMoves, player);
+        // sort moves on basis of piece values
+        List<String> nextMoves = MoveFilter.sortMovesByPiece(nonSortedMoves, player);
         int counter = 0;
 
+        // get the best move recursively
         for(String s : nextMoves){
         	
-        	if(counter == filterThreshold)
+        	if(counter == Constants.FILTERTHRESHOLD)
         		break;
         	
-            int boardTag = s.charAt(19) - '0';
+            int boardTag = s.charAt(19) - Constants.ZERO;
             char ch = s.charAt(12);
             String color = s.substring(0, 5);
             if(color.equals(Constants.PLAYER_BLACK)) ch = Character.toLowerCase(ch);
-            int preCol = s.charAt(21) - 'a';
-            int preRow = 8 - (s.charAt(22) - '0');
-            int col = s.charAt(27) - 'a';
-            int row = 8 - (s.charAt(28) - '0');
+            int preCol = s.charAt(21) - Constants.SMALL_A;
+            int preRow = 8 - (s.charAt(22) - Constants.ZERO);
+            int col = s.charAt(27) - Constants.SMALL_A;
+            int row = 8 - (s.charAt(28) - Constants.ZERO);
             char preChar = board.getFromBoard(boardTag, row, col);
             //update board
             board.setBoard(boardTag, preRow, preCol, ' ');
@@ -207,23 +241,32 @@ public class BaseAliceAIImpl implements AliceAI {
         return bestMove;
     }
 
+    /**
+     * Get the max value
+     * 
+     * @param depth - depth is reached by the minimax
+     * @return the maximum value reached for the given depth
+     */
     private int max(int depth) {
         if (depth == 0) {
             return evaluate();
         }
 
+        // set best value to minimum
         int bestValue = Integer.MIN_VALUE;
         List<String> nextWhiteMoves = nextWhiteMoves();
         if (nextWhiteMoves.size() == 0) return bestValue;
+        
+        // calculate max value recursively
         for (String s : nextWhiteMoves) {
-            int boardTag = s.charAt(19) - '0';
+            int boardTag = s.charAt(19) - Constants.ZERO;
             char ch = s.charAt(12);
             String color = s.substring(0, 5);
             if(color.equals(Constants.PLAYER_BLACK)) ch = Character.toLowerCase(ch);
-            int preCol = s.charAt(21) - 'a';
-            int preRow = 8 - (s.charAt(22) - '0');
-            int col = s.charAt(27) - 'a';
-            int row = 8 - (s.charAt(28) - '0');
+            int preCol = s.charAt(21) - Constants.SMALL_A;
+            int preRow = 8 - (s.charAt(22) - Constants.ZERO);
+            int col = s.charAt(27) - Constants.SMALL_A;
+            int row = 8 - (s.charAt(28) - Constants.ZERO);
             char preChar = board.getFromBoard(boardTag, row, col);
             //update board
             board.setBoard(boardTag, preRow, preCol, ' ');
@@ -241,23 +284,32 @@ public class BaseAliceAIImpl implements AliceAI {
         return bestValue;
     }
 
+    /**
+     * Get the min value
+     * 
+     * @param depth - depth is reached by the minimax
+     * @return the minimum value reached for the given depth
+     */
     private int min(int depth) {
         if (depth == 0) {
             return evaluate();
         }
 
+        // set best value to maximum
         int bestValue = Integer.MAX_VALUE;
         List<String> nextBlackMoves = nextBlackMoves();
         if(nextBlackMoves.size() == 0) return bestValue;
+        
+        // calculate minimum value recursively
         for(String s : nextBlackMoves){
-            int boardTag = s.charAt(19) - '0';
+            int boardTag = s.charAt(19) - Constants.ZERO;
             char ch = s.charAt(12);
             String color = s.substring(0, 5);
             if(color.equals(Constants.PLAYER_BLACK)) ch = Character.toLowerCase(ch);
-            int preCol = s.charAt(21) - 'a';
-            int preRow = 8 - (s.charAt(22) - '0');
-            int col = s.charAt(27) - 'a';
-            int row = 8 - (s.charAt(28) - '0');
+            int preCol = s.charAt(21) - Constants.SMALL_A;
+            int preRow = 8 - (s.charAt(22) - Constants.ZERO);
+            int col = s.charAt(27) - Constants.SMALL_A;
+            int row = 8 - (s.charAt(28) - Constants.ZERO);
             char preChar = board.getFromBoard(boardTag, row, col);
             //update board
             board.setBoard(boardTag, preRow, preCol, ' ');
@@ -275,7 +327,14 @@ public class BaseAliceAIImpl implements AliceAI {
         return bestValue;
     }
 
+    /**
+     * Get the the list of player scores
+     * 
+     * @param board - board representing the pieces
+     * @return      - list of player scores
+     */
     private int[] evaluate(char[][] board) {
+    	// initialize the scores to zero
     	int sumWhite = 0;
     	int sumBlack = 0;
     	
@@ -283,27 +342,27 @@ public class BaseAliceAIImpl implements AliceAI {
             switch (board[i / 8][i % 8]){
                 case 'P' : sumWhite += Constants.STRENGTH_PAWN;
                     break;
-                case 'R' : sumWhite += 82;
+                case 'R' : sumWhite += Constants.STRENGTH_ROOK;
                     break;
-                case 'N' : sumWhite += 32;
+                case 'N' : sumWhite += Constants.STRENGTH_KNIGHT;
                     break;
-                case 'B' : sumWhite += 54;
+                case 'B' : sumWhite += Constants.STRENGTH_BISHOP;
                     break;
-                case 'Q' : sumWhite += 132;
+                case 'Q' : sumWhite += Constants.STRENGTH_QUEEN;
                     break;
-                case 'K' : sumWhite += 10000;
+                case 'K' : sumWhite += Constants.STRENGTH_KING;
                     break;
                 case 'p' : sumBlack += Constants.STRENGTH_PAWN;
                     break;
-                case 'r' : sumBlack += 82;
+                case 'r' : sumBlack += Constants.STRENGTH_PAWN;
                     break;
-                case 'n' : sumBlack += 32;
+                case 'n' : sumBlack += Constants.STRENGTH_KNIGHT;
                     break;
-                case 'b' : sumBlack += 54;
+                case 'b' : sumBlack += Constants.STRENGTH_BISHOP;
                     break;
-                case 'q' : sumBlack += 132;
+                case 'q' : sumBlack += Constants.STRENGTH_QUEEN;
                     break;
-                case 'k' : sumBlack += 10000;
+                case 'k' : sumBlack += Constants.STRENGTH_KING;
                     break;
             }
         }
@@ -314,7 +373,6 @@ public class BaseAliceAIImpl implements AliceAI {
     /**
      * This function evaluate the current board and return a score which is calculated by considering
      * the pieces, check, move ability, and ...
-     *
      */
     private int evaluate(){
         // scores of white and black

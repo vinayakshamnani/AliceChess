@@ -5,13 +5,26 @@ import util.Constants;
 
 import model.Board;
 
+/**
+ * Class for representing queen
+ * 
+ * @author Ajay
+ */
 public class QueenChessPiece extends BaseChessPiece {
 
+	/**
+	 * Parameterized constructor for setting queen on board
+	 * 
+	 * @param board - chess board model
+	 * @param name  - name of the piece
+	 */
 	public QueenChessPiece(Board board, char name) {
 		super(board, name);
-		// TODO Auto-generated constructor stub
 	}
 
+	/**
+	 * move the queen on the board
+	 */
 	@Override
 	public void movePiece(int boardTag, int pos, List<String> moves) {
         int r = pos / 8;
@@ -31,7 +44,7 @@ public class QueenChessPiece extends BaseChessPiece {
                             // if the target position on the opposite board is empty and king is safe after the move
                             // then we can make the move
                             if (board.getFromBoard((boardTag * 2) % 3, r + i * steps, c + j * steps) == ' ') {
-                                char ch = player.equals(Constants.PLAYER_WHITE) ? 'Q' : 'q';
+                                char ch = player.equals(Constants.PLAYER_WHITE) ? Constants.WHITE_QUEEN : Constants.BLACK_QUEEN;
                                 // update the board to check if king is still safe after the rook move
                                 board.setBoard(boardTag, r, c, ' ');
                                 board.setBoard((boardTag * 2) % 3, r + i * steps, c + j * steps, ch);
@@ -51,7 +64,7 @@ public class QueenChessPiece extends BaseChessPiece {
                                 player.equals(Constants.PLAYER_WHITE)) {
                             // check if the corresponding position on the other board is empty
                             if (board.getFromBoard((boardTag * 2) % 3, r + i * steps, c + j * steps) == ' ') {
-                                char ch = player.equals(Constants.PLAYER_WHITE) ? 'Q' : 'q';
+                                char ch = player.equals(Constants.PLAYER_WHITE) ? Constants.WHITE_QUEEN : Constants.BLACK_QUEEN;
                                 char enemy = board.getFromBoard(boardTag, r + i * steps, c + j * steps);
                                 // temporarily update the board to check if king is still safe after the rook move
                                 board.setBoard(boardTag, r, c, ' ');
@@ -69,6 +82,7 @@ public class QueenChessPiece extends BaseChessPiece {
                             }
                         }
                     } catch (Exception e) {
+                    	e.printStackTrace();
                     }
                 }
             }

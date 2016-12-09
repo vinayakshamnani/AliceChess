@@ -1,17 +1,31 @@
 package ai.pieces;
 
 import java.util.List;
-import util.Constants;
 
 import model.Board;
+import util.Constants;
 
+/**
+ * Class for representing bishop
+ * 
+ * @author Ajay
+ *
+ */
 public class BishopChessPiece extends BaseChessPiece {
 
+	/**
+	 * Parameterized constructor for setting bishop on board
+	 * 
+	 * @param board - chess board model
+	 * @param name  - name of the piece
+	 */
 	public BishopChessPiece(Board board, char name) {
 		super(board, name);
-		// TODO Auto-generated constructor stub
 	}
 
+	/**
+	 * move the bishop on the board
+	 */
 	@Override
 	public void movePiece(int boardTag, int pos, List<String> moves) {
         int r = pos / 8;
@@ -68,7 +82,9 @@ public class BishopChessPiece extends BaseChessPiece {
                         }
                     }
                 }
-                catch (Exception e){}
+                catch (Exception e){
+                	e.printStackTrace();
+                }
             }
         }
 		

@@ -56,8 +56,17 @@ public interface AliceAI {
 	 */
 	String pickBestMove(boolean isMaxPlayer);
 	
-	
+	/**
+	 * add the chess piece in the AI
+	 * 
+	 * @param chessPiece the chess piece to be added
+	 */
 	void addChessPieceToAI(IChessPiece chessPiece);
 	
+	/**
+	 * Get the board
+	 * 
+	 * @return the board model
+	 */
 	Board getAIBoard();
 }
