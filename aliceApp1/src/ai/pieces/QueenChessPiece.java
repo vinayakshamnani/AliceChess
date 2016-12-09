@@ -81,9 +81,7 @@ public class QueenChessPiece extends BaseChessPiece {
                                 board.setBoard((boardTag * 2) % 3, r + i * steps, c + j * steps, ' ');
                             }
                         }
-                    } catch (Exception e) {
-                    	e.printStackTrace();
-                    }
+                    } catch (Exception e) {}
                 }
             }
         }

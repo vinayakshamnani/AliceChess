@@ -82,12 +82,8 @@ public class BishopChessPiece extends BaseChessPiece {
                         }
                     }
                 }
-                catch (Exception e){
-                	e.printStackTrace();
-                }
+                catch (Exception e){}
             }
         }
-		
 	}
-
 }

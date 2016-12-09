@@ -18,8 +18,8 @@ public class PawnChessPiece extends BaseChessPiece {
 	 * @param board - chess board model
 	 * @param name  - name of the piece
 	 */
-	public PawnChessPiece(Board board, char pieceName) {
-		 super(board, pieceName);
+	public PawnChessPiece(Board board, char name) {
+		 super(board, name);
 	}
 	
 	/**
@@ -68,10 +68,8 @@ public class PawnChessPiece extends BaseChessPiece {
             board.setBoard(boardTag, r, c, ch);
             board.setBoard((boardTag * 2) % 3, r + dir, c, ' ');
         }
-        }catch (Exception e){
-        	e.printStackTrace();
-        	System.out.println("row:"+ r+dir + " col:"+ c);
-        } 
+        }catch (Exception e){}
+
         //catch enemy piece
         try{
             for(int i = -1; i <= 1; i+=2) {
@@ -93,9 +91,6 @@ public class PawnChessPiece extends BaseChessPiece {
                     board.setBoard((boardTag * 2) % 3, r + dir, c + i, ' ');
                 }
             }
-        }catch (Exception e){
-        	e.printStackTrace();
-        }
-
+        }catch (Exception e){}
     }
 }

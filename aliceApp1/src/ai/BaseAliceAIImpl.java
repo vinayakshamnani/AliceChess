@@ -30,7 +30,7 @@ public class BaseAliceAIImpl implements AliceAI {
 	 */
 	public BaseAliceAIImpl()
 	{
-		chessPieces = new ArrayList<IChessPiece>();
+		chessPieces = new ArrayList<>();
 	}
 	
 	/**
@@ -53,28 +53,8 @@ public class BaseAliceAIImpl implements AliceAI {
 		return board;
 	}
 
-	@Override
-	public List<String> filterMoves(List<String> validMoves) {
-		return validMoves;
-	}
-	
 	/**
-	 * Get the list of white player moves
-	 * 
-	 * @param board    - the board
-	 * @param boardTag - the board tag (1 or 2)
-	 * @param moves    - the list of moves
-	 */
-	public void nextWhiteMoves(char[][] board, int boardTag, List<String> moves) {
-        for(int i = 0; i < 64; i++)
-        	for(IChessPiece p : chessPieces) 
-        		if(p.getPieceName() > Constants.CAP_A && p.getPieceName() < Constants.CAP_Z && p.getPieceName() == board[i / 8][i % 8]) 
-        			p.movePiece(boardTag, i, moves);
-	}
-	
-	
-	/**
-	 * Returns the next set of white moves that are legal to make but not smarter.
+	 * Returns all the possible white moves that are legal to make.
 	 */
     public List<String> nextWhiteMoves(){
         List<String> moves = new ArrayList<String>();
@@ -89,6 +69,45 @@ public class BaseAliceAIImpl implements AliceAI {
         return moves;
     }
 
+    @Override
+    public List<String> filterMoves(List<String> validMoves) {
+        return validMoves;
+    }
+
+    /**
+     * Get the list of white player moves
+     *
+     * @param board    - the board
+     * @param boardTag - the board tag (1 or 2)
+     * @param moves    - the list of moves
+     */
+    public void nextWhiteMoves(char[][] board, int boardTag, List<String> moves) {
+        for(int i = 0; i < 64; i++)
+            if(board[i / 8][i % 8] == ' ') continue;
+            else{
+                for(IChessPiece p : chessPieces)
+                    if(p.getPieceName() > Constants.CAP_A && p.getPieceName() < Constants.CAP_Z
+                            && p.getPieceName() == board[i / 8][i % 8])
+                        p.movePiece(boardTag, i, moves);
+            }
+    }
+
+    /**
+     * Returns all the possible next black moves that are legal to make.
+     */
+    public List<String> nextBlackMoves(){
+        List<String> moves = new ArrayList<String>();
+
+    	/* Loop through all positions on the first board and find out if a move can be made by the piece */
+        nextBlackMoves(board.getBoardA(), Board.BOARD_A, moves);
+
+    	/* Loop through all positions on the second board and find out if a move can be made by the piece */
+        nextBlackMoves(board.getBoardB(), Board.BOARD_B, moves);
+
+    	/* Finally return the List of moves. If this is empty, the calling program should give up. */
+        return moves;
+    }
+
     /**
 	 * Get the list of black player moves
 	 * 
@@ -97,28 +116,16 @@ public class BaseAliceAIImpl implements AliceAI {
 	 * @param moves    - the list of moves
 	 */
     public void nextBlackMoves(char[][]board, int boardTag, List<String> moves){
-        for(int i = 0; i < 64; i++) 
-        	for(IChessPiece p : chessPieces) 
-        		if(p.getPieceName() > Constants.SMALL_A && p.getPieceName() < Constants.SMALL_Z && p.getPieceName() == board[i / 8][i % 8]) 
-        			p.movePiece(boardTag, i, moves);      
+        for(int i = 0; i < 64; i++)
+            if(board[i / 8][i % 8] == ' ') continue;
+            else {
+                for (IChessPiece p : chessPieces)
+                    if (p.getPieceName() > Constants.SMALL_A && p.getPieceName() < Constants.SMALL_Z
+                            && p.getPieceName() == board[i / 8][i % 8])
+                        p.movePiece(boardTag, i, moves);
+            }
     }
 
-    /**
-     * Returns the next set of black moves that are legal to make but not smarter.
-     */
-    public List<String> nextBlackMoves(){
-    	List<String> moves = new ArrayList<String>();
-    	
-    	/* Loop through all positions on the first board and find out if a move can be made by the piece */
-    	nextBlackMoves(board.getBoardA(), Board.BOARD_A, moves);
-    	
-    	/* Loop through all positions on the second board and find out if a move can be made by the piece */
-    	nextBlackMoves(board.getBoardB(), Board.BOARD_B, moves);
-    	
-    	/* Finally return the List of moves. If this is empty, the calling program should give up. */
-    	return moves;
-    }
-    
     /**
      * Update the board model for the move (move is represented by string)
      */
@@ -134,7 +141,7 @@ public class BaseAliceAIImpl implements AliceAI {
         int col = s.charAt(27) - Constants.SMALL_A;
         int row = 8 - (s.charAt(28) - Constants.ZERO);
 
-        // when a pawn reach the last row, it will be automatically promoted to a queen.
+        // when a pawn reaches the last row, it will be automatically promoted to a queen.
         if(ch == Constants.BLACK_PAWN && row == 0) ch = Constants.BLACK_QUEEN;
         if(ch == Constants.WHITE_PAWN && row == 7) ch = Constants.WHITE_QUEEN;
 
@@ -327,49 +334,7 @@ public class BaseAliceAIImpl implements AliceAI {
         return bestValue;
     }
 
-    /**
-     * Get the the list of player scores
-     * 
-     * @param board - board representing the pieces
-     * @return      - list of player scores
-     */
-    private int[] evaluate(char[][] board) {
-    	// initialize the scores to zero
-    	int sumWhite = 0;
-    	int sumBlack = 0;
-    	
-    	for(int i = 0; i < 64; i++){
-            switch (board[i / 8][i % 8]){
-                case 'P' : sumWhite += Constants.STRENGTH_PAWN;
-                    break;
-                case 'R' : sumWhite += Constants.STRENGTH_ROOK;
-                    break;
-                case 'N' : sumWhite += Constants.STRENGTH_KNIGHT;
-                    break;
-                case 'B' : sumWhite += Constants.STRENGTH_BISHOP;
-                    break;
-                case 'Q' : sumWhite += Constants.STRENGTH_QUEEN;
-                    break;
-                case 'K' : sumWhite += Constants.STRENGTH_KING;
-                    break;
-                case 'p' : sumBlack += Constants.STRENGTH_PAWN;
-                    break;
-                case 'r' : sumBlack += Constants.STRENGTH_PAWN;
-                    break;
-                case 'n' : sumBlack += Constants.STRENGTH_KNIGHT;
-                    break;
-                case 'b' : sumBlack += Constants.STRENGTH_BISHOP;
-                    break;
-                case 'q' : sumBlack += Constants.STRENGTH_QUEEN;
-                    break;
-                case 'k' : sumBlack += Constants.STRENGTH_KING;
-                    break;
-            }
-        }
-    	
-    	return new int[] {sumWhite, sumBlack};
-    }
-    
+
     /**
      * This function evaluate the current board and return a score which is calculated by considering
      * the pieces, check, move ability, and ...
@@ -389,9 +354,66 @@ public class BaseAliceAIImpl implements AliceAI {
         sumBlack += sums[1];
 
         // add points for check
-        if(!chessPieces.get(0).isKingSafe(Constants.PLAYER_WHITE)) sumBlack += 1;
-        if(!chessPieces.get(0).isKingSafe(Constants.PLAYER_BLACK)) sumWhite += 1;
+        if(!chessPieces.get(0).isKingSafe(Constants.PLAYER_WHITE)) sumBlack += Constants.CHECK;
+        if(!chessPieces.get(0).isKingSafe(Constants.PLAYER_BLACK)) sumWhite += Constants.CHECK;
 
         return sumWhite - sumBlack;
+    }
+
+    /**
+     * Get the the list of player scores
+     *
+     * @param board - board representing the pieces
+     * @return      - list of player scores
+     */
+    private int[] evaluate(char[][] board) {
+        // initialize the scores to zero
+        int sumWhite = 0;
+        int sumBlack = 0;
+
+        for(int i = 0; i < 64; i++){
+            int row = i / 8;
+            int col = i % 8;
+            switch (board[row][col]){
+                case Constants.WHITE_PAWN :
+                    sumWhite += Constants.STRENGTH_PAWN + Constants.PAWN_TABLE[row][col];
+                    break;
+                case Constants.WHITE_ROOK :
+                    sumWhite += Constants.STRENGTH_ROOK + Constants.ROOK_TABLE[row][col];
+                    break;
+                case Constants.WHITE_KNIGHT :
+                    sumWhite += Constants.STRENGTH_KNIGHT + Constants.KNIGHT_TABLE[row][col];
+                    break;
+                case Constants.WHITE_BISHOP :
+                    sumWhite += Constants.STRENGTH_BISHOP + Constants.BISHOP_TABLE[row][col];
+                    break;
+                case Constants.WHITE_QUEEN :
+                    sumWhite += Constants.STRENGTH_QUEEN + Constants.QUEEN_TABLE[row][col];
+                    break;
+                case Constants.WHITE_KING :
+                    sumWhite += Constants.STRENGTH_KING;
+                    break;
+                case Constants.BLACK_PAWN :
+                    sumBlack += Constants.STRENGTH_PAWN + Constants.PAWN_TABLE[7 - row][7 - col];
+                    break;
+                case Constants.BLACK_ROOK :
+                    sumBlack += Constants.STRENGTH_ROOK + Constants.ROOK_TABLE[7 - row][7 - col];
+                    break;
+                case Constants.BLACK_KNIGHT :
+                    sumBlack += Constants.STRENGTH_KNIGHT + Constants.KNIGHT_TABLE[7 - row][7 - col];
+                    break;
+                case Constants.BLACK_BISHOP :
+                    sumBlack += Constants.STRENGTH_BISHOP + Constants.BISHOP_TABLE[7 - row][7 - col];
+                    break;
+                case Constants.BLACK_QUEEN :
+                    sumBlack += Constants.STRENGTH_QUEEN + Constants.QUEEN_TABLE[7 - row][7 - col];
+                    break;
+                case Constants.BLACK_KING :
+                    sumBlack += Constants.STRENGTH_KING;
+                    break;
+            }
+        }
+
+        return new int[] {sumWhite, sumBlack};
     }
 }

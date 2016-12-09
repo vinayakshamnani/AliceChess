@@ -46,7 +46,7 @@ public class Main {
             if(read.substring(6, 11).equals("moves")) {
             	ai.update(read);
 
-            	// check if the move made player to surrender, if it is, update the board
+            	// Choose the best move for the current player, update the board; Surrender if there is no further moves
                 if(player.equals(Constants.PLAYER_WHITE)){
                     List<String> whiteMoves = ai.nextWhiteMoves();
                     if(whiteMoves.size() == 0){
