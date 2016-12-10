@@ -40,6 +40,7 @@ public class Main {
             ai.update(bestMove);
         }
 
+        long currTime = 0l;
         // read incoming move and play next move until game closes
         while(isStarted){
             String read = sc.nextLine();
@@ -48,7 +49,15 @@ public class Main {
 
             	// Choose the best move for the current player, update the board; Surrender if there is no further moves
                 if(player.equals(Constants.PLAYER_WHITE)){
+                	currTime = System.currentTimeMillis();
                     List<String> whiteMoves = ai.nextWhiteMoves();
+                    currTime = System.currentTimeMillis() - currTime;
+                    
+                    if(currTime > 800l)
+                    	Constants.FILTERTHRESHOLD -= 2;
+                    else if (currTime < 400L)
+                    	Constants.FILTERTHRESHOLD++;
+                    
                     if(whiteMoves.size() == 0){
                     	System.out.println(player + Constants.SURRENDERS);
                         break;
@@ -58,7 +67,15 @@ public class Main {
                     ai.update(bestMove);
                 }
                 else{
+                	currTime = System.currentTimeMillis();
                     List<String> blackMoves = ai.nextBlackMoves();
+                    currTime = System.currentTimeMillis() - currTime;
+                    
+                    if(currTime > 800l)
+                    	Constants.FILTERTHRESHOLD -= 2;
+                    else if (currTime < 400L)
+                    	Constants.FILTERTHRESHOLD++;
+                    
                     if(blackMoves.size() == 0){
                     	System.out.println(player + Constants.SURRENDERS);
                         break;

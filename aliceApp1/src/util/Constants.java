@@ -45,7 +45,7 @@ public class Constants {
 	// Constant for mini-max depth
 	public final static int DEPTH = 3;
 	// Constant for max threshold moves
-	public final static int FILTERTHRESHOLD = 35;
+	public  static int FILTERTHRESHOLD = 35;
 	// Constant for representing zero
 	public static final char ZERO = '0';
 	
