@@ -142,15 +142,15 @@ public class BaseAliceAIImpl implements AliceAI {
         int row = 8 - (s.charAt(28) - Constants.ZERO);
 
         // when a pawn reaches the last row, it will be automatically promoted to a queen.
-        if(ch == Constants.BLACK_PAWN && row == 0) ch = Constants.BLACK_QUEEN;
-        if(ch == Constants.WHITE_PAWN && row == 7) ch = Constants.WHITE_QUEEN;
+        if(ch == Constants.BLACK_PAWN && row == 7) ch = Constants.BLACK_QUEEN;
+        if(ch == Constants.WHITE_PAWN && row == 0) ch = Constants.WHITE_QUEEN;
 
         // Just update the board.
         board.setBoard(boardTag, preRow, preCol, ' ');
         board.setBoard(boardTag, row, col, ' ');
         board.setBoard((boardTag * 2) % 3, row, col, ch);
 
-        //printBoard();
+        printBoard();
     }
 
     @SuppressWarnings("unused")
@@ -222,6 +222,11 @@ public class BaseAliceAIImpl implements AliceAI {
             int col = s.charAt(27) - Constants.SMALL_A;
             int row = 8 - (s.charAt(28) - Constants.ZERO);
             char preChar = board.getFromBoard(boardTag, row, col);
+
+            // when a pawn reaches the last row, it will be automatically promoted to a queen.
+            if(ch == Constants.BLACK_PAWN && row == 7) ch = Constants.BLACK_QUEEN;
+            if(ch == Constants.WHITE_PAWN && row == 0) ch = Constants.WHITE_QUEEN;
+
             //update board
             board.setBoard(boardTag, preRow, preCol, ' ');
             board.setBoard(boardTag, row, col, ' ');
@@ -275,6 +280,11 @@ public class BaseAliceAIImpl implements AliceAI {
             int col = s.charAt(27) - Constants.SMALL_A;
             int row = 8 - (s.charAt(28) - Constants.ZERO);
             char preChar = board.getFromBoard(boardTag, row, col);
+
+            // when a pawn reaches the last row, it will be automatically promoted to a queen.
+            if(ch == Constants.BLACK_PAWN && row == 7) ch = Constants.BLACK_QUEEN;
+            if(ch == Constants.WHITE_PAWN && row == 0) ch = Constants.WHITE_QUEEN;
+
             //update board
             board.setBoard(boardTag, preRow, preCol, ' ');
             board.setBoard(boardTag, row, col, ' ');
@@ -318,6 +328,11 @@ public class BaseAliceAIImpl implements AliceAI {
             int col = s.charAt(27) - Constants.SMALL_A;
             int row = 8 - (s.charAt(28) - Constants.ZERO);
             char preChar = board.getFromBoard(boardTag, row, col);
+
+            // when a pawn reaches the last row, it will be automatically promoted to a queen.
+            if(ch == Constants.BLACK_PAWN && row == 7) ch = Constants.BLACK_QUEEN;
+            if(ch == Constants.WHITE_PAWN && row == 0) ch = Constants.WHITE_QUEEN;
+
             //update board
             board.setBoard(boardTag, preRow, preCol, ' ');
             board.setBoard(boardTag, row, col, ' ');
